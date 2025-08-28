@@ -1,0 +1,6 @@
+# Windsurf Deploys Configuration (Beta)
+# This is an auto-generated file used to store your app deployment configuration. Do not modify.
+# The framework of the web application (examples: nextjs, react, vue, etc.)
+framework: eleventy
+# Custom domain configuration
+domain: ailive.fr
