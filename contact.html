@@ -70,32 +70,61 @@
   <section class="section" id="contact">
     <div class="container">
       <h1 class="section-title">Let's Work Together</h1>
-      <p class="section-subtitle">Ready to transform your e-commerce vision into reality? Get in touch and let's discuss your project.</p>
-      
       <div class="contact-content animated">
-        <form class="contact-form">
-          <div class="form-group">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" id="name" class="form-control" required>
+        <!-- Calendar Section -->
+        <div class="calendar-section">
+          <h2 class="calendar-title">
+            <i class="fas fa-calendar-alt"></i>
+            Schedule a Meeting
+          </h2>
+          <div class="appointment-scheduler">
+            <iframe 
+              src="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0WSxCkjVNjne3gPVDtSSVuAnmjNCaLiZaMd2bfCYEslwwRrCJnzRl7ltk8z4q5VOWh3IjdfU9D"
+              width="100%" 
+              height="800" 
+              frameborder="0" 
+              scrolling="yes"
+              title="Book an Appointment"
+              style="border: 1px solid var(--color-border); border-radius: 8px;">
+            </iframe>
           </div>
-          
-          <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" class="form-control" required>
+          <div class="calendar-info">
+            <p><i class="fas fa-map-marker-alt"></i> Paris, France (CET/CEST)</p>
           </div>
-          
-          <div class="form-group">
-            <label for="subject" class="form-label">Subject</label>
-            <input type="text" id="subject" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="message" class="form-label">Message</label>
-            <textarea id="message" class="form-control" rows="5" required></textarea>
-          </div>
-          
-          <button type="submit" class="btn btn-primary w-100">Send Message</button>
-        </form>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="contact-form-wrapper">
+          <h2 class="form-title">
+            <i class="fas fa-envelope"></i>
+            Send us a Message
+          </h2>
+          <form class="contact-form" id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <input type="text" id="name" class="form-control" placeholder="Full Name" required>
+              </div>
+              
+              <div class="form-group">
+                <input type="email" id="email" class="form-control" placeholder="Email Address" required>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <input type="text" id="subject" class="form-control" placeholder="Subject" required>
+            </div>
+            
+            <div class="form-group">
+              <textarea id="message" class="form-control" rows="6" placeholder="Tell us more about your inquiry..." required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-send" id="submitBtn">
+              <i class="fas fa-paper-plane"></i>
+              Send Message
+            </button>
+            <div id="formMessage" class="form-message" style="display: none;"></div>
+          </form>
+        </div>
       </div>
     </div>
   </section>  <!-- Footer -->
@@ -109,7 +138,26 @@
           <div class="footer-contact-list">
             <p><i class="fas fa-envelope"></i> contact@ailive.fr</p>
             <p><i class="fas fa-map-marker-alt"></i> Paris, France</p>
-            <p><i class="fas fa-phone"></i> Available upon request</p>
+            <div class="social-links">
+              <a href="https://www.instagram.com/visualife.vfx/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.facebook.com/ailive.fr/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-facebook"></i>
+              </a>
+              <a href="https://twitter.com/visualife_vfx" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="https://www.tiktok.com/@visualife.vfx" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-tiktok"></i>
+              </a>
+              <a href="https://www.linkedin.com/in/infusionbio/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-linkedin"></i>
+              </a>
+              <a href="https://share.google/uNnNzRiEEd1NnwXw1" target="_blank" rel="noopener noreferrer">
+                <img src="assets/images/logos/google-my-business-logo.svg" alt="Google My Business" style="width: 20px; height: 20px;">
+              </a>
+            </div>
           </div>
         </div>
         <div class="col-md-6">
@@ -122,11 +170,6 @@
             <li><a href="design.html">Visual Design</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
-          <div class="language-switch-footer">
-            <button class="language-btn" data-lang="en">EN</button>
-            <span class="language-divider">|</span>
-            <button class="language-btn" data-lang="fr">FR</button>
-          </div>
         </div>
       </div>
       <div class="footer-bottom">
@@ -142,5 +185,7 @@
 
   <!-- JavaScript -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/contact-form.js"></script>
+  <script src="assets/js/calendar-booking.js"></script>
 </body>
 </html>
