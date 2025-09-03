@@ -256,11 +256,41 @@ img {
 .language-selector {
   margin-left: var(--space-3);
   padding: var(--space-1) var(--space-2);
-  background-color: transparent;
+  background-color: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  color: var(--text-secondary);
+  color: var(--text-primary);
   cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.language-selector:hover {
+  background-color: var(--bg-tertiary);
+  border-color: var(--primary);
+}
+
+.language-selector option {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Force dark styling for language selector dropdown in dark mode */
+body:not(.light-theme) .language-selector {
+  color-scheme: dark;
+}
+
+body:not(.light-theme) .language-selector option {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+
+body.light-theme .language-selector {
+  color-scheme: light;
+}
+
+body.light-theme .language-selector option {
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
 .mobile-menu-btn {

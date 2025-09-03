@@ -67,9 +67,41 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   function loadLanguage(language) {
-    // For now, we'll just save the preference
-    // The full implementation will come later when we add translations
-    console.log(`Language set to: ${language}`);
+    // Get current page and navigate to corresponding language version
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    // Define page mappings between English and French
+    const pageMapping = {
+      // English to French
+      'index.html': 'accueil.html',
+      'shopify.html': 'developpement.html',
+      'seo.html': 'seo-fr.html',
+      'automation.html': 'automatisation.html',
+      'design.html': 'contenu.html',
+      'contact.html': 'contact-fr.html',
+      
+      // French to English
+      'accueil.html': 'index.html',
+      'developpement.html': 'shopify.html',
+      'seo-fr.html': 'seo.html',
+      'automatisation.html': 'automation.html',
+      'contenu.html': 'design.html',
+      'contact-fr.html': 'contact.html'
+    };
+    
+    let targetPage;
+    
+    if (language === 'fr') {
+      // Switch to French version
+      targetPage = pageMapping[currentPage] || 'accueil.html';
+    } else if (language === 'en') {
+      // Switch to English version
+      targetPage = pageMapping[currentPage] || 'index.html';
+    }
+    
+    if (targetPage && targetPage !== currentPage) {
+      window.location.href = targetPage;
+    }
   }
   
   function loadLanguagePreference() {
