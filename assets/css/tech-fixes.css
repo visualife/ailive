@@ -453,6 +453,20 @@ body:not([class*="light"]) .tech-logo-wall .tech-logo .tech-img[src*="Pinecone-l
   overflow: hidden;
   border: 1px solid var(--color-border);
   margin-bottom: 1.5rem;
+  background: var(--color-bg);
+}
+
+/* Dark mode iframe styling */
+[data-theme="dark"] .appointment-scheduler iframe {
+  filter: invert(1) hue-rotate(180deg);
+  background: var(--color-bg-secondary);
+}
+
+/* Fix double inversion for images and specific elements inside iframe */
+[data-theme="dark"] .appointment-scheduler iframe img,
+[data-theme="dark"] .appointment-scheduler iframe svg,
+[data-theme="dark"] .appointment-scheduler iframe [style*="background-image"] {
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .calendar-info {
