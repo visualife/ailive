@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Audit SEO, Google et IA — Cabinet du Dr Patrick Lellouche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap">
+<style>
+  /* Charte « table lumineuse » — fond de radiographie, chiffres traités comme des mesures */
+  :root{
+    --bg:#141d27; --panel:#1c2835; --panel-2:#233142; --line:#2e3e50;
+    --ink:#e9eff5; --dim:#a7b6c6; --faint:#8093a6;
+    --ok:#3fc9a6;   --ok-bg:#1a3334;
+    --mid:#eab54a;  --mid-bg:#33301f;
+    --warn:#f2745d; --warn-bg:#382528;
+    --idea:#8fb8ff; --idea-bg:#1f2d45;
+    --display:"Fraunces",Georgia,"Times New Roman",serif;
+    --text:"Atkinson Hyperlegible Next",Verdana,"Segoe UI",sans-serif;
+    color-scheme:dark;
+  }
+  html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 16px);-webkit-text-size-adjust:100%}
+  *{box-sizing:border-box}
+  body{
+    margin:0;color:var(--ink);font-family:var(--text);font-size:1.0625rem;line-height:1.6;
+    background:var(--bg) radial-gradient(120% 60% at 50% -10%,#1d2a38 0%,rgba(20,29,39,0) 60%) no-repeat;
+    padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);
+    font-variant-numeric:lining-nums;
+  }
+  .wrap{max-width:800px;margin:0 auto;padding:64px 28px 88px}
+  a{color:inherit}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--ok);outline-offset:3px;border-radius:4px}
+
+  /* ——— En-tête ——— */
+  .top{display:flex;flex-direction:column}
+  .from{order:1;font-size:0.9375rem;color:var(--dim);font-weight:500;margin:0 0 18px}
+  h1{font-family:var(--display);font-optical-sizing:auto;font-weight:300;font-size:3.5rem;line-height:1.04;letter-spacing:-.025em;margin:0 0 14px}
+  .date{order:2;color:var(--dim);font-size:0.875rem;line-height:1.5;margin:0 0 44px;padding-top:16px;border-top:1px solid var(--line)}
+
+  /* ——— Sommaire ——— */
+  .toc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:72px}
+  .toc p{margin:0 0 12px;font-size:0.8125rem;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);font-weight:600}
+  .toc ol{margin:0;padding-left:26px;columns:2;column-gap:36px;font-size:0.9375rem}
+  .toc li{break-inside:avoid;padding-left:2px}
+  .toc li::marker{font-family:var(--display);color:var(--ok)}
+  .toc a{display:inline-block;padding:10px 0;text-decoration:underline;text-decoration-color:var(--line);text-decoration-thickness:1px;text-underline-offset:5px;transition:text-decoration-color .15s}
+  .toc a:hover{text-decoration-color:var(--ok)}
+
+  /* ——— Sections : numéro, phrase-titre, texte ——— */
+  section{margin-bottom:80px}
+  h2{display:flex;align-items:baseline;gap:12px;font-size:0.8125rem;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);font-weight:600;margin:0 0 14px}
+  h2 .n{font-family:var(--display);font-weight:300;font-size:1.875rem;letter-spacing:0;color:var(--ok);line-height:1;font-variant-numeric:tabular-nums;min-width:1.1em}
+  h2::after{content:"";flex:1;height:1px;background:var(--line);align-self:center}
+  .head{font-family:var(--display);font-optical-sizing:auto;font-size:1.5rem;font-weight:500;letter-spacing:-.012em;line-height:1.3;margin:0 0 24px;max-width:32em}
+  h3{font-size:0.8125rem;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);font-weight:600;margin:36px 0 12px}
+  h1{text-wrap:balance}
+  .head,.ctitle,.verdict p,.end p,p,li{text-wrap:pretty}
+  .g{color:var(--ok)} .r{color:var(--warn)}
+  .note{margin:16px 0 0;font-size:0.9375rem;color:var(--dim);max-width:40em}
+  .note b{color:var(--ink);font-weight:600}
+
+  /* ——— Verdict ——— */
+  .verdict{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:30px 30px 28px;margin-bottom:16px}
+  .verdict p{margin:0;font-family:var(--display);font-optical-sizing:auto;font-size:1.625rem;line-height:1.32;font-weight:400;letter-spacing:-.015em}
+
+  .score{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 26px}
+  .srow{display:grid;grid-template-columns:160px 150px 1fr;gap:18px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}
+  .srow:last-child{border-bottom:0}
+  .sname{font-weight:600;font-size:1rem}
+  .bar{display:block;min-height:16px}
+  .bar svg{display:block}
+  .sdesc{font-size:0.9375rem;color:var(--dim);line-height:1.45}
+
+  /* ——— Chiffres clés : la mesure au pied à coulisse ——— */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 20px 18px}
+  .stat b{display:inline-block;font-family:var(--display);font-optical-sizing:auto;font-weight:300;font-size:3.25rem;letter-spacing:-.03em;line-height:1;font-variant-numeric:proportional-nums lining-nums;margin-bottom:12px;white-space:nowrap}
+  .stat b::after,.ai .rk::after{
+    content:"";display:block;height:7px;margin-top:10px;opacity:.7;
+    border-left:1px solid currentColor;border-right:1px solid currentColor;
+    background:linear-gradient(currentColor,currentColor) center/100% 1px no-repeat;
+  }
+  .stat span{font-size:0.875rem;color:var(--dim);line-height:1.4;display:block}
+  .s-ok b{color:var(--ok)} .s-mid b{color:var(--mid)} .s-warn b{color:var(--warn)}
+
+  /* ——— Atouts ——— */
+  .good{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .gi{background:var(--ok-bg);border-radius:12px;padding:16px 18px;border:1px solid color-mix(in srgb,var(--ok) 35%,transparent)}
+  .gi p{margin:0;font-weight:600;font-size:1rem;line-height:1.35}
+  .gi span{display:block;margin-top:6px;color:var(--dim);font-size:0.875rem;font-weight:400;line-height:1.45}
+
+  /* ——— Grille carte ——— */
+  .gridwrap{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+  .legend{flex:1;min-width:220px;font-size:0.9375rem;color:var(--dim);margin:0}
+  .legend b{color:var(--ink);font-weight:600}
+
+  /* ——— Tableaux ——— */
+  .scroll{
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+    /* ombres de défilement : n'apparaissent que si le tableau déborde */
+    background:
+      linear-gradient(90deg,var(--bg) 30%,rgba(20,29,39,0)) left/28px 100% no-repeat local,
+      linear-gradient(270deg,var(--bg) 30%,rgba(20,29,39,0)) right/28px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.45),transparent) left/12px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.45),transparent) right/12px 100% no-repeat scroll;
+  }
+  #corrections .tbl,#recherche .tbl{min-width:600px}
+  .tbl{width:100%;border-collapse:collapse;font-size:0.9375rem}
+  .tbl th{text-align:left;font-size:0.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-weight:600;padding:0 14px 10px 0;border-bottom:1px solid var(--line);white-space:nowrap}
+  .tbl td{padding:12px 14px 12px 0;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl .q{font-weight:600}
+  .tbl .who{color:var(--dim);font-size:0.9063rem}
+  .tbl .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .tbl .c{text-align:center}
+  .yes{color:var(--ok);font-weight:600} .no{color:var(--warn);font-weight:600}
+
+  /* Statuts : couleur + mot + forme de teinte (plein / moitié / contour) */
+  .pos,.st{display:inline-flex;align-items:center;gap:6px;border-radius:6px;font-weight:700;white-space:nowrap}
+  .pos{min-width:70px;justify-content:center;padding:3px 9px;font-size:0.8438rem}
+  .st{font-size:0.7188rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px}
+  .pos::before,.st::before{content:"";flex:none;width:7px;height:10px;border-radius:2px;border:1.5px solid currentColor}
+  .p-ok,.st-ok{background:var(--ok-bg);color:var(--ok)}
+  .p-mid,.st-a{background:var(--mid-bg);color:var(--mid)}
+  .p-no,.st-c{background:var(--warn-bg);color:var(--warn)}
+  .st-m{background:var(--panel-2);color:var(--dim)}
+  .p-ok::before,.st-ok::before{background:currentColor}
+  .p-mid::before,.st-a::before{background:linear-gradient(to top,currentColor 50%,transparent 50%)}
+  .st-m::before{border-style:dotted}
+
+  .fix td:first-child{width:32px;color:var(--faint);font-family:var(--display);font-size:1rem}
+  .fix .ct{font-weight:600}
+  .fix .ct small{display:block;color:var(--dim);font-size:0.875rem;margin-top:3px;font-weight:400;line-height:1.45}
+  .via{display:inline-block;font-size:0.6875rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:1px 7px;margin-left:6px;background:var(--idea-bg);color:var(--idea);vertical-align:1px;white-space:nowrap}
+  .ie{font-size:0.875rem;white-space:nowrap;color:var(--dim)}
+  .ie b{color:var(--ink);font-weight:600}
+  .fix .grp td{width:auto;font-family:var(--text);padding-top:26px;font-size:0.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);font-weight:600;border-bottom:1px solid var(--line)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 12px;font-size:0.875rem}
+
+  /* ——— Assistants IA ——— */
+  .ai{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:12px}
+  .ai .ask{margin:0 0 16px;font-size:0.9063rem;color:var(--faint)}
+  .ai .ask b{color:var(--ink);font-weight:500;font-style:italic}
+  .ai .res{display:flex;gap:16px;align-items:flex-start;margin-bottom:12px}
+  .ai .rk{display:inline-block;font-family:var(--display);font-optical-sizing:auto;font-size:3rem;font-weight:300;letter-spacing:-.03em;line-height:1;font-variant-numeric:proportional-nums;flex:none}
+  .ai .rt{font-size:1rem;font-weight:600;padding-top:8px}
+  .ai p.d{margin:0;color:var(--dim);font-size:0.9375rem}
+  .ai p.d b{color:var(--ink);font-weight:600}
+
+  /* ——— Encadrés ——— */
+  .callout{border-radius:12px;padding:16px 20px;background:var(--idea-bg);border:1px solid color-mix(in srgb,var(--idea) 35%,transparent);font-size:0.9688rem;margin-top:16px}
+  .callout b{font-weight:700}
+  .callout.warn{background:var(--warn-bg);border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
+
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+  .rule{border-radius:12px;padding:16px 20px}
+  .rule.y{background:var(--ok-bg)} .rule.n{background:var(--warn-bg)}
+  .rule h3{margin:0 0 8px;color:inherit;font-size:0.7813rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+  .rule.y h3{color:var(--ok)} .rule.n h3{color:var(--warn)}
+  .rule ul{margin:0;padding-left:18px;font-size:0.9375rem}
+  .rule li{margin-bottom:4px}
+
+  details{margin-top:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+  summary{cursor:pointer;padding:14px 20px;font-size:0.9375rem;font-weight:600;color:var(--dim);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;border-radius:12px}
+  summary:hover{color:var(--ink)}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-family:var(--display);font-size:1.375rem;font-weight:300;color:var(--ok);line-height:1}
+  details[open] summary::after{content:"−"}
+  .dbody{padding:0 20px 18px;font-size:0.9375rem;color:var(--dim)}
+  .dbody p{margin:0 0 10px;max-width:70ch}
+  .dbody li,.ai p.d{max-width:70ch}
+  .dbody b{color:var(--ink);font-weight:600}
+  .dbody ul{margin:0 0 10px;padding-left:18px}
+  .dbody li{margin-bottom:6px}
+
+  /* ——— Où corriger ——— */
+  .three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .col{border-radius:12px;padding:20px 22px;background:var(--panel);border:1px solid var(--line)}
+  .col h3{text-transform:none;letter-spacing:0;color:var(--ink);margin:0 0 10px;font-family:var(--display);font-size:1.125rem;font-weight:500;line-height:1.25}
+  .col ul{margin:0;padding-left:18px;font-size:0.9063rem;color:var(--dim)}
+  .col li{margin-bottom:6px}
+  .col.a{border-color:var(--ok)} .col.a h3{color:var(--ok)}
+  .col.b h3{color:var(--idea)}
+  .col.c{border-style:dashed} .col.c h3{color:var(--dim)}
+
+  .qs{margin:0;padding-left:26px;font-size:1rem}
+  .qs li{margin-bottom:10px;padding-left:4px}
+  .qs li::marker{font-family:var(--display);color:var(--ok)}
+  .qs li span{color:var(--dim)}
+
+  .end{background:var(--panel);border:1px solid var(--ok);border-radius:14px;padding:32px 30px}
+  .end p{margin:0;font-family:var(--display);font-optical-sizing:auto;font-size:1.875rem;font-weight:400;line-height:1.25;letter-spacing:-.015em}
+  .end span{display:block;margin-top:12px;font-size:1rem;color:var(--dim);font-weight:400}
+
+  footer{margin-top:48px;padding-top:22px;border-top:1px solid var(--line);color:var(--faint);font-size:0.8438rem}
+  footer p{margin:0 0 6px}
+
+  @media (max-width:359px){
+    .stat{padding:14px}
+    .stat b{font-size:2rem}
+    .ai .rk{font-size:2.375rem}
+  }
+  @media (max-width:600px){
+    body{font-size:1.0625rem}
+    .wrap{padding:36px 16px 64px}
+    h1{font-size:2.0625rem}
+    .from{margin-bottom:14px}
+    .date{margin-bottom:32px}
+    .toc{padding:18px 20px;margin-bottom:56px}
+    .toc ol{columns:1}
+    section{margin-bottom:64px}
+    h2 .n{font-size:1.625rem}
+    .head{font-size:1.3125rem}
+    .verdict{padding:22px 20px}
+    .verdict p{font-size:1.3125rem}
+    .score{padding:4px 18px}
+    .srow{grid-template-columns:1fr 130px;gap:6px 14px}
+    .sdesc{grid-column:1/-1}
+    .good,.rules,.three{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .stat{padding:16px}
+    .stat b{font-size:2.75rem}
+    .ai{padding:18px}
+    .ai .rk{font-size:2.75rem}
+    .end{padding:24px 20px}
+    .end p{font-size:1.5rem}
+  }
+
+  /* ——— Graphiques ——— */
+  .chart{margin:0 0 20px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px 18px}
+  .chart .ctitle{font-family:var(--display);font-optical-sizing:auto;font-size:1.1875rem;font-weight:500;line-height:1.3;letter-spacing:-.01em;margin:0 0 18px;color:var(--ink)}
+  .chart .score{background:none;border:0;border-radius:0;padding:0}
+  .cv{width:100%}
+  .cv svg{display:block;max-width:100%;overflow:visible}
+  .cv-heat{max-width:380px}
+  .chart details.data{margin-top:16px;background:transparent}
+  .chart details.data summary{padding:11px 14px;font-size:0.875rem}
+  .chart details.data .dbody{padding:0 14px 12px}
+  .chart details.data .tbl{font-size:0.875rem}
+  .clegend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 0;font-size:0.8438rem;color:var(--dim);line-height:1.4}
+  .clegend span{display:inline-flex;align-items:center;gap:7px}
+  .sw{flex:none;display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid transparent}
+  .sw-ok{background:var(--ok);border-color:var(--ok)}
+  .sw-mid{border-color:var(--mid);background:linear-gradient(to top,var(--mid) 50%,transparent 50%)}
+  .sw-crit{border-color:var(--warn)}
+  .sw-hm{border-color:var(--mid);background:var(--mid-bg)}
+  .sw-abs{border:1.5px dashed var(--faint)}
+  .sw-home{border-radius:2px;background:var(--warn);border-color:var(--warn)}
+  .sw-other{border-radius:2px;border:1.5px solid var(--line)}
+  .heatwrap{flex:none;width:100%;max-width:380px;margin:0}
+
+  .cv text{font-family:var(--text);font-size:13px;fill:var(--dim)}
+  .cv .t-lab{fill:var(--ink)}
+  .cv .t-strong{fill:var(--ink);font-weight:700}
+  .cv .t-val{fill:var(--ink);font-weight:700}
+  .cv .t-tick{fill:var(--faint);font-size:12px}
+  .cv .t-small{fill:var(--dim);font-size:12px}
+  .cv .t-axis{fill:var(--faint);font-size:11px;font-weight:600;letter-spacing:.12em}
+  .cv .t-zone{fill:var(--ok);font-size:12px;font-weight:700;letter-spacing:.04em}
+  .cv .t-crit{fill:var(--warn)}
+  .cv .halo{paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round}
+  .cv .axis{stroke:var(--faint);stroke-width:1}
+  .cv .grid{stroke:var(--line);stroke-width:1}
+  .cv .ref{stroke:var(--dim);stroke-width:1.5}
+  .cv .brk{stroke:var(--dim);stroke-width:1.5;fill:none}
+  .cv .band-ok{fill:var(--ok-bg)}
+  .cv .band-crit{fill:var(--warn-bg)}
+  .cv .ring{fill:none;stroke:var(--faint);stroke-width:1}
+  .cv .north-arrow{fill:none;stroke:var(--faint);stroke-width:1.5}
+
+  .cv .seg-off{fill:none;stroke:var(--faint)}
+  .cv .seg-ok{fill:var(--ok)} .cv .seg-mid{fill:var(--mid)} .cv .seg-crit{fill:var(--warn)}
+
+  .cv .mk-ring{stroke-width:2;fill:var(--panel)}
+  .cv .mk-ok .mk-ring{fill:var(--ok);stroke:var(--ok)}
+  .cv .mk-mid .mk-ring{stroke:var(--mid)} .cv .mk-mid .mk-fill{fill:var(--mid)}
+  .cv .mk-crit .mk-ring{stroke:var(--warn)}
+  .cv .band-crit ~ g .mk-crit .mk-ring{fill:var(--warn-bg)}
+
+  .cv .cell{fill:var(--panel-2)}
+  .cv .cell-q{fill:var(--ok-bg);stroke:var(--ok);stroke-width:1.5}
+  .cv .tok rect{fill:var(--bg);stroke:var(--line)}
+  .cv .tok text{fill:var(--ink);font-weight:700}
+  .cv .tok-q rect{fill:var(--ok);stroke:var(--ok)}
+  .cv .tok-q text{fill:#0b1a16}
+
+  .cv .hp circle{stroke-width:2}
+  .cv .hp text{font-family:var(--display);font-size:17px}
+  .cv .hp-ok circle{fill:var(--ok);stroke:var(--ok)} .cv .hp-ok text{fill:#0b1a16;font-weight:600}
+  .cv .hp-mid circle{fill:var(--mid-bg);stroke:var(--mid)} .cv .hp-mid text{fill:var(--mid)}
+  .cv .hp-abs circle{fill:var(--panel);stroke:var(--faint);stroke-dasharray:4 3;stroke-width:1.5}
+  .cv .hp-abs text{fill:var(--dim);font-family:var(--text);font-size:11.5px;font-weight:600}
+
+  .cv .pt circle{fill:var(--dim);stroke:var(--panel);stroke-width:2}
+  .cv .pt-me circle{fill:var(--warn);stroke:var(--panel)}
+
+  .cv .track{fill:var(--panel-2)}
+  .cv .bar-hi{fill:var(--ink)} .cv .bar-lo{fill:var(--faint)}
+  .cv .wf-home{fill:var(--warn)} .cv .wf-other{fill:none;stroke:var(--line)}
+
+  @media (max-width:600px){
+    .chart{padding:18px 16px 14px;margin-left:-4px;margin-right:-4px}
+    .chart .ctitle{font-size:1.0938rem}
+  }
+
+  .cv .measure{fill:none;stroke:var(--dim);stroke-width:1}
+
+  /* ——— Mouvement : les graphiques se construisent une fois, à leur entrée ——— */
+  @media screen and (prefers-reduced-motion: no-preference){
+    html{scroll-behavior:smooth}
+    .anim .cv .grow{transform-box:fill-box;transform-origin:left center;transition:transform .55s cubic-bezier(.22,.8,.3,1) var(--d,0ms)}
+    .anim .chart:not(.in) .cv .grow{transform:scaleX(0)}
+    .anim .cv .pop{transform-box:fill-box;transform-origin:center;transition:transform .45s cubic-bezier(.16,1,.3,1) var(--d,0ms),opacity .2s linear var(--d,0ms)}
+    .anim .chart:not(.in) .cv .pop{transform:scale(.6);opacity:0}
+  }
+
+  /* ——— Impression : A4, thème clair, lisible en niveaux de gris ——— */
+  @page{size:A4;margin:16mm 15mm 18mm}
+  @media print{
+    :root{
+      --bg:#fff; --panel:#fff; --panel-2:#eef1f4; --line:#c9d1da;
+      --ink:#111820; --dim:#3b4957; --faint:#56687a;
+      --ok:#1b7160; --ok-bg:#e3f0ec; --mid:#7d5f0f; --mid-bg:#f5ecd4;
+      --warn:#b0412a; --warn-bg:#f7e4df; --idea:#2c5aa8; --idea-bg:#e6edf8;
+      color-scheme:light;
+    }
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    html{scroll-behavior:auto}
+    body{background:#fff;font-size:10.5pt;line-height:1.5;padding:0}
+    .wrap{max-width:none;padding:0}
+    .toc,summary::after{display:none}
+    h1{font-size:30pt;margin-bottom:12pt}
+    .from{margin-bottom:14pt}
+    .date{margin-bottom:22pt}
+
+    section{margin:0;break-before:page}
+    section#verdict{break-before:auto}
+    h2,.head,h3,.ctitle{break-after:avoid}
+    .head{font-size:16pt}
+    .verdict p{font-size:16pt}
+    .cv,.clegend,.score,.srow,tr,.callout,.stat,.gi,.ai,.rules,.col,details,.end,.qs li,.chips{break-inside:avoid}
+    .chart{break-inside:auto;border:0;border-radius:0;padding:0;margin:16pt 0 12pt}
+    .chart .ctitle{margin-bottom:10pt}
+    .chart details.data{margin-top:10pt}
+    .gridwrap{break-inside:avoid;align-items:flex-start}
+    .gridwrap .legend{padding-top:40pt}
+    h2+.head,h2+.verdict{break-before:avoid}
+    .head+*{break-before:avoid}
+    .end{break-before:avoid}
+
+    .scroll{overflow:visible;background:none}
+    #corrections .tbl,#recherche .tbl{min-width:0}
+    .tbl{font-size:9.5pt}
+    .tbl td{padding:6pt 8pt 6pt 0}
+    .verdict,.score,.toc,.stat,.ai,.col,.end,details,.chart,.chip{background:#fff}
+
+    details::details-content{content-visibility:visible;display:contents}
+    details{border-color:var(--line)}
+    summary{cursor:default;color:var(--ink);font-size:9pt;text-transform:uppercase;letter-spacing:.1em;padding-bottom:4pt}
+
+    .cv svg{height:auto}
+    .cv .halo{stroke:none}
+    .cv .hp-ok text,.cv .tok-q text{fill:#fff}
+    .cv .pt circle{fill:#a9b3bd;stroke:#fff}
+    .cv .pt-me circle{fill:var(--warn)}
+    .cv .bar-lo{fill:#a9b3bd}
+    .cv .grow,.cv .pop{transform:none!important;opacity:1!important;transition:none!important}
+    .chart details.data{border:0;border-top:1px solid var(--line);border-radius:0;padding-top:4pt}
+    .chart details.data summary{padding:0 0 4pt;font-size:8pt}
+    .chart details.data .dbody{padding:0}
+    .chart details.data .tbl{font-size:8.5pt}
+    .chart details.data .tbl th{padding-bottom:3pt}
+    .chart details.data .tbl td{padding:2.5pt 8pt 2.5pt 0}
+    .cv-heat{max-width:300px}
+    section:not(#corrections) .scroll{break-inside:avoid}
+    .srow{padding:7pt 0}
+    .verdict{padding:16pt 20pt}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+  <div class="from">Ailive.fr — Emmanuel Mesguich</div>
+  <h1>Audit SEO, Google et IA<br>Cabinet du Dr Patrick Lellouche</h1>
+  <p class="date">Septembre 2026 · dr-patrick-lellouche.chirurgiens-dentistes.fr · 285 pages analysées · plateforme Webdentiste</p>
+  </header>
+
+  <nav class="toc" aria-label="Sommaire">
+    <p>Sommaire</p>
+    <ol>
+      <li><a href="#verdict">Le verdict</a></li>
+      <li><a href="#corrections">Les corrections, par impact</a></li>
+      <li><a href="#atouts">Ce qui marche déjà</a></li>
+      <li><a href="#carte">Sur la carte Google</a></li>
+      <li><a href="#recherche">Dans la recherche Google</a></li>
+      <li><a href="#ia">Dans les assistants IA</a></li>
+      <li><a href="#fiche">Ta fiche Google</a></li>
+      <li><a href="#avis">Ta réputation</a></li>
+      <li><a href="#site">Ton site, page par page</a></li>
+      <li><a href="#liens">Les sites qui renvoient vers toi</a></li>
+      <li><a href="#infos">Tes informations en ligne</a></li>
+      <li><a href="#ou">Ce qui se corrige, et où</a></li>
+      <li><a href="#confirmer">À confirmer avec toi</a></li>
+      <li><a href="#methode">Méthode et suivi</a></li>
+    </ol>
+  </nav>
+
+  <main>
+  <section id="verdict">
+    <h2><span class="n">1</span>Le verdict</h2>
+    <div class="verdict">
+      <p>Tu as une <span class="g">réputation solide</span> et un site <span class="g">techniquement sain</span>.<br>
+      Mais Google et les IA ne te montrent <span class="r">qu'à ceux qui te connaissent déjà</span>.</p>
+    </div>
+    <figure class="chart"><figcaption class="ctitle">Ta réputation et ton site à 4 sur 5 ; ta visibilité sur Google à 2 sur 5</figcaption>
+    <div class="score" role="table" aria-label="Évaluation par domaine">
+      <div class="srow" role="row"><span class="sname" role="cell">Réputation</span><span class="bar cv" role="cell" aria-label="4 sur 5" data-chart="score" data-score="4"></span><span class="sdesc" role="cell">186 avis, 4,5 — un peu sous tes voisins les mieux notés</span></div>
+      <div class="srow" role="row"><span class="sname" role="cell">Site, technique</span><span class="bar cv" role="cell" aria-label="4 sur 5" data-chart="score" data-score="4"></span><span class="sdesc" role="cell">Rapide, sécurisé, lisible par Google et les IA</span></div>
+      <div class="srow" role="row"><span class="sname" role="cell">Assistants IA</span><span class="bar cv" role="cell" aria-label="3 sur 5" data-chart="score" data-score="3"></span><span class="sdesc" role="cell">ChatGPT te cite, mais ne sait pas te décrire</span></div>
+      <div class="srow" role="row"><span class="sname" role="cell">Infos en ligne</span><span class="bar cv" role="cell" aria-label="3 sur 5" data-chart="score" data-score="3"></span><span class="sdesc" role="cell">Horaires et ancienneté se contredisent</span></div>
+      <div class="srow" role="row"><span class="sname" role="cell">Recherche Google</span><span class="bar cv" role="cell" aria-label="2 sur 5" data-chart="score" data-score="2"></span><span class="sdesc" role="cell">22ᵉ sur « dentiste Charenton », absent sur tes soins</span></div>
+      <div class="srow" role="row"><span class="sname" role="cell">Carte Google</span><span class="bar cv" role="cell" aria-label="2 sur 5" data-chart="score" data-score="2"></span><span class="sdesc" role="cell">Invisible à 600 m de ton cabinet</span></div>
+    </div>
+    <details class="data"><summary>Voir les données</summary><div class="dbody"><div class="scroll"><table class="tbl"><thead><tr><th>Domaine</th><th>Note sur 5</th></tr></thead><tbody><tr><td>Réputation</td><td>4</td></tr><tr><td>Site, technique</td><td>4</td></tr><tr><td>Assistants IA</td><td>3</td></tr><tr><td>Infos en ligne</td><td>3</td></tr><tr><td>Recherche Google</td><td>2</td></tr><tr><td>Carte Google</td><td>2</td></tr></tbody></table></div></div></details></figure>
+  </section>
+
+  <section id="corrections">
+    <h2><span class="n">2</span>Les corrections, par impact</h2>
+    <p class="head">21 constats, du plus rentable au plus accessoire.</p>
+    <figure class="chart"><figcaption class="ctitle">5 constats à fort impact se corrigent avec un effort faible</figcaption><div class="cv" data-chart="matrix" role="img" aria-label="Matrice impact et effort des 21 constats : les constats 1, 2, 3, 5 et 6 ont un impact élevé pour un effort faible."></div><details class="data"><summary>Voir les données</summary><div class="dbody"><div class="scroll"><table class="tbl"><thead><tr><th>#</th><th>Constat</th><th>Impact</th><th>Effort</th></tr></thead><tbody><tr><td>1</td><td>Fiche Google incomplète</td><td>Élevé</td><td>faible</td></tr><tr><td>2</td><td>Horaires contradictoires</td><td>Élevé</td><td>faible</td></tr><tr><td>3</td><td>Articles masqués</td><td>Élevé</td><td>faible</td></tr><tr><td>4</td><td>Aucune page par soin</td><td>Élevé</td><td>important</td></tr><tr><td>5</td><td>Infos divergentes</td><td>Élevé</td><td>faible</td></tr><tr><td>6</td><td>Fiche d'identité technique</td><td>Élevé</td><td>faible</td></tr><tr><td>7</td><td>Descriptions manquantes</td><td>Moyen</td><td>faible</td></tr><tr><td>8</td><td>Accueil sans titre principal</td><td>Moyen</td><td>faible</td></tr><tr><td>9</td><td>Page praticien vide</td><td>Moyen</td><td>faible</td></tr><tr><td>10</td><td>Urgences hors horaires</td><td>Moyen</td><td>faible</td></tr><tr><td>11</td><td>Avis sans réponse</td><td>Moyen</td><td>faible</td></tr><tr><td>12</td><td>Pages anglaise et espagnole</td><td>Moyen</td><td>faible</td></tr><tr><td>13</td><td>Articles hors du plan du site</td><td>Moyen</td><td>faible</td></tr><tr><td>14</td><td>Lien cassé</td><td>Faible</td><td>faible</td></tr><tr><td>15</td><td>Pages trop courtes</td><td>Faible</td><td>faible</td></tr><tr><td>16</td><td>Titres trop longs ou courts</td><td>Faible</td><td>faible</td></tr><tr><td>17</td><td>Fautes d'orthographe</td><td>Faible</td><td>faible</td></tr><tr><td>18</td><td>Image sans texte</td><td>Faible</td><td>faible</td></tr><tr><td>19</td><td>Téléphone en deux formats</td><td>Faible</td><td>faible</td></tr><tr><td>20</td><td>Niveaux de titres (gabarit)</td><td>Faible</td><td>hors de ta main</td></tr><tr><td>21</td><td>Liens entrants faibles</td><td>Faible</td><td>aucun</td></tr></tbody></table></div></div></details></figure>
+    <div class="scroll">
+    <table class="tbl fix">
+      <thead><tr><th>#</th><th>Constat</th><th>Statut</th><th>Impact · effort</th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="4">Critique</td></tr>
+        <tr><td>1</td><td class="ct">Fiche Google incomplète<small>Catégories urgences, implants et blanchiment absentes ; 9 photos ; lien vers le site en http.</small></td><td><span class="st st-c">critique</span></td><td class="ie"><b>Élevé</b> · faible</td></tr>
+        <tr><td>2</td><td class="ct">Horaires contradictoires<small>Lundi au vendredi sur Google, trois jours sur ton site.</small></td><td><span class="st st-c">critique</span></td><td class="ie"><b>Élevé</b> · faible</td></tr>
+        <tr><td>3</td><td class="ct">Une quinzaine de tes articles masqués à Google<small>Dont les plus locaux : Métro Liberté, St Maurice, Honoraires.</small></td><td><span class="st st-c">critique</span></td><td class="ie"><b>Élevé</b> · faible</td></tr>
+        <tr><td>4</td><td class="ct">Aucune page dédiée à un soin<small>Absent sur implants, facettes et blanchiment ; 15ᵉ sur les urgences.</small></td><td><span class="st st-c">critique</span></td><td class="ie"><b>Élevé</b> · important</td></tr>
+        <tr class="grp"><td colspan="4">À corriger</td></tr>
+        <tr><td>5</td><td class="ct">Informations divergentes d'un site à l'autre<small>33 ou 30 ans d'exercice ; formations absentes de ton site ; PagesJaunes non revendiquée.</small></td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Élevé</b> · faible</td></tr>
+        <tr><td>6</td><td class="ct">Fiche d'identité technique défaillante <span class="via">via Webdentiste</span><small>En double, sans coordonnées GPS, sans ton nom de praticien, sans lien vers Doctolib ou Ameli, avec une image de démonstration oubliée.</small></td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Élevé</b> · faible</td></tr>
+        <tr><td>7</td><td class="ct">178 pages sans description dans Google<small>Google en invente une à ta place.</small></td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Moyen</b> · faible</td></tr>
+        <tr><td>8</td><td class="ct">Accueil sans titre principal<small>Le premier élément que Google lit.</small></td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Moyen</b> · faible</td></tr>
+        <tr><td>9</td><td class="ct">Page « Le praticien » vide<small>Ni parcours, ni formation, ni photo.</small></td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Moyen</b> · faible</td></tr>
+        <tr><td>10</td><td class="ct">Urgences sans solution hors horaires<small>Pas de numéro de garde ; la page urgences orthodontiques n'est reliée à aucune autre.</small></td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Moyen</b> · faible</td></tr>
+        <tr><td>11</td><td class="ct">8 avis négatifs sans réponse</td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Moyen</b> · faible</td></tr>
+        <tr><td>12</td><td class="ct">Pages anglaise et espagnole déclarées en français <span class="via">via Webdentiste</span><small>Google ne les montre pas aux patients anglophones ou hispanophones.</small></td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Moyen</b> · faible</td></tr>
+        <tr><td>13</td><td class="ct">Articles absents du plan du site envoyé à Google <span class="via">via Webdentiste</span></td><td><span class="st st-a">à corriger</span></td><td class="ie"><b>Moyen</b> · faible</td></tr>
+        <tr><td>14</td><td class="ct">Lien cassé dans les mentions légales<small>Il renvoie vers une page qui n'existe pas.</small></td><td><span class="st st-a">à corriger</span></td><td class="ie">Faible · faible</td></tr>
+        <tr class="grp"><td colspan="4">Mineur</td></tr>
+        <tr><td>15</td><td class="ct">3 pages trop courtes<small>Cas cliniques, prise de rendez-vous, diaporama.</small></td><td><span class="st st-m">mineur</span></td><td class="ie">Faible · faible</td></tr>
+        <tr><td>16</td><td class="ct">17 titres de page trop longs ou trop courts</td><td><span class="st st-m">mineur</span></td><td class="ie">Faible · faible</td></tr>
+        <tr><td>17</td><td class="ct">Fautes d'orthographe sur l'accueil et un article</td><td><span class="st st-m">mineur</span></td><td class="ie">Faible · faible</td></tr>
+        <tr><td>18</td><td class="ct">Une image sans texte descriptif</td><td><span class="st st-m">mineur</span></td><td class="ie">Faible · faible</td></tr>
+        <tr><td>19</td><td class="ct">Téléphone affiché sous deux formats</td><td><span class="st st-m">mineur</span></td><td class="ie">Faible · faible</td></tr>
+        <tr><td>20</td><td class="ct">Niveaux de titres sautés sur 91 pages <span class="via">via Webdentiste</span><small>Lié au gabarit de la plateforme.</small></td><td><span class="st st-m">mineur</span></td><td class="ie">Faible · hors de ta main</td></tr>
+        <tr><td>21</td><td class="ct">Liens entrants de faible qualité<small>Google les ignore déjà : aucune action nécessaire.</small></td><td><span class="st st-m">mineur</span></td><td class="ie">Faible · aucun</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section id="atouts">
+    <h2><span class="n">3</span>Ce qui marche déjà</h2>
+    <p class="head">Tu pars avec de vrais atouts.</p>
+    <div class="good">
+      <div class="gi"><p>186 avis Google<span>Le 2ᵉ dentiste le plus évalué de Charenton, deux fois plus que tes voisins directs.</span></p></div>
+      <div class="gi"><p>1ᵉʳ sur « Dr Lellouche »<span>Depuis Charenton, qui tape ton nom te trouve en premier.</span></p></div>
+      <div class="gi"><p>ChatGPT te connaît<span>Il te cite parmi les dentistes à consulter, et 2ᵉ sur les implants.</span></p></div>
+      <div class="gi"><p>Ouvert aux assistants IA<span>Ton site ne bloque aucun robot : ChatGPT, Claude, Perplexity peuvent le lire.</span></p></div>
+      <div class="gi"><p>Un site rapide et sécurisé<span>161 ms de réponse, HTTPS, contenu lisible sans JavaScript.</span></p></div>
+      <div class="gi"><p>Des bases propres<span>Une adresse unique par page, des titres uniques et locaux.</span></p></div>
+      <div class="gi"><p>Adresse et téléphone identiques partout<span>Sur ton site, dans ta fiche et dans les annuaires.</span></p></div>
+      <div class="gi"><p>Présent dans tous les annuaires<span>Doctolib, PagesJaunes, Ameli, sante.fr, Doctoome, Le Figaro, Acceslibre, annuairedentaire, 118dentistes.</span></p></div>
+      <div class="gi"><p>Tu réponds à tes avis<span>17 de tes 25 avis négatifs ont déjà une réponse de ta part.</span></p></div>
+      <div class="gi"><p>Une adresse sur l'extension de l'Ordre<span>Réservée aux chirurgiens-dentistes inscrits : un gage de sérieux.</span></p></div>
+    </div>
+  </section>
+
+  <section id="carte">
+    <h2><span class="n">4</span>Sur la carte Google</h2>
+    <p class="head">Premier devant ta porte, <span class="r">invisible deux rues plus loin</span>.</p>
+    <div class="gridwrap">
+      <figure class="chart heatwrap"><figcaption class="ctitle">1ᵉʳ devant ton cabinet ; sur les 8 autres points, au mieux 10ᵉ</figcaption><div class="cv cv-heat" data-chart="heat" role="img" aria-label="Classement sur Google Maps depuis 9 points autour du cabinet : 1ᵉʳ au centre ; au nord 10ᵉ ; à l'ouest 14ᵉ ; à l'est 18ᵉ ; au sud 13ᵉ ; au sud-est 20ᵉ ; absent au nord-ouest, au nord-est et au sud-ouest."></div><p class="clegend"><span><span class="sw sw-ok"></span>dans les 3 premiers</span><span><span class="sw sw-hm"></span>de 4ᵉ à 20ᵉ</span><span><span class="sw sw-abs"></span>absent des 20 premiers</span></p><details class="data"><summary>Voir les données</summary><div class="dbody"><div class="scroll"><table class="tbl"><thead><tr><th></th><th>Ouest</th><th>Centre</th><th>Est</th></tr></thead><tbody><tr><td>Nord</td><td>absent</td><td>10ᵉ</td><td>absent</td></tr><tr><td>Centre</td><td>14ᵉ</td><td>1ᵉʳ (cabinet)</td><td>18ᵉ</td></tr><tr><td>Sud</td><td>absent</td><td>13ᵉ</td><td>20ᵉ</td></tr></tbody></table></div></div></details></figure>
+      <p class="legend">Recherche « dentiste » depuis 9 points autour du 139 rue de Paris, à 600 m d'intervalle. <b>Google n'affiche que les 3 premiers</b> sur la carte. Présent sur 6 points sur 9, en 13ᵉ position en moyenne.</p>
+    </div>
+    <div class="callout warn">
+      <b>Sur « meilleur dentiste Charenton-le-Pont », tu n'apparais pas.</b> Google affiche six cabinets : Dr Jabbour, Dr Belhassen, Dr Marx, Dr Halfon, Dr Licht, Dr Lemaigre. Tous sont notés <b>4,7 ou plus</b>.
+    </div>
+    <div class="callout">
+      <b>Sur « dentiste Charenton »</b>, la carte montre Dr Jabbour, Dr Marx et Dr Belhassen. Elle s'affiche au-dessus de tous les autres résultats : c'est là que se choisit un dentiste de quartier.
+    </div>
+  </section>
+
+  <section id="recherche">
+    <h2><span class="n">5</span>Dans la recherche Google</h2>
+    <p class="head">Sur tes soins, tes voisins sont là. <span class="r">Toi, non.</span></p>
+    <figure class="chart"><figcaption class="ctitle">1ᵉʳ sur ton nom, absent sur 5 des 10 recherches testées</figcaption><div class="cv" data-chart="ladder" role="img" aria-label="Positions dans Google sur 10 recherches : 1ᵉʳ, 6ᵉ, 12ᵉ, 15ᵉ, 22ᵉ, et absent sur 5."></div><p class="clegend"><span><span class="sw sw-ok"></span>1ʳᵉ page (1ᵉʳ à 10ᵉ)</span><span><span class="sw sw-mid"></span>2ᵉ page (11ᵉ à 20ᵉ)</span><span><span class="sw sw-crit"></span>au-delà, ou absent</span></p><details class="data"><summary>Voir les données</summary><div class="dbody"><div class="scroll"><table class="tbl"><thead><tr><th>Recherche</th><th>Volume</th><th>Position</th></tr></thead><tbody><tr><td>Dr Lellouche</td><td>390</td><td>1ᵉʳ</td></tr><tr><td>dentiste Charenton-le-Pont</td><td>480</td><td>6ᵉ</td></tr><tr><td>aligneurs, orthodontie adulte</td><td>—</td><td>12ᵉ</td></tr><tr><td>urgence dentaire Charenton</td><td>—</td><td>15ᵉ</td></tr><tr><td>dentiste Charenton</td><td>170</td><td>22ᵉ</td></tr><tr><td>implant dentaire Charenton</td><td>—</td><td>absent</td></tr><tr><td>facettes dentaires Charenton</td><td>—</td><td>absent</td></tr><tr><td>blanchiment dentaire Charenton</td><td>—</td><td>absent</td></tr><tr><td>dentiste Charenton avis</td><td>—</td><td>absent</td></tr><tr><td>dentiste Saint-Maurice</td><td>—</td><td>absent</td></tr></tbody></table></div></div></details></figure>
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>Recherche depuis Charenton</th><th>Volume</th><th>Toi</th><th>Devant toi</th></tr></thead>
+      <tbody>
+        <tr><td class="q">Dr Lellouche</td><td class="num who">≈ 390</td><td><span class="pos p-ok">1ᵉʳ</span></td><td class="who">—</td></tr>
+        <tr><td class="q">dentiste Charenton-le-Pont</td><td class="num who">≈ 480</td><td><span class="pos p-ok">6ᵉ</span></td><td class="who">Dr Belhassen, Doctolib</td></tr>
+        <tr><td class="q">aligneurs, orthodontie adulte</td><td class="num who">—</td><td><span class="pos p-mid">12ᵉ</span></td><td class="who">Quatre orthodontistes</td></tr>
+        <tr><td class="q">urgence dentaire Charenton</td><td class="num who">—</td><td><span class="pos p-mid">15ᵉ</span></td><td class="who">Dr Belhassen, Dr Harroch, Dr Halfon</td></tr>
+        <tr><td class="q">dentiste Charenton</td><td class="num who">≈ 170</td><td><span class="pos p-no">22ᵉ</span></td><td class="who">Dr Belhassen, Dr Halfon, Doctolib, annuaires</td></tr>
+        <tr><td class="q">implant dentaire Charenton</td><td class="num who">—</td><td><span class="pos p-no">absent</span></td><td class="who">Dr Belhassen, Dr Corcos, Dr Halfon</td></tr>
+        <tr><td class="q">facettes dentaires Charenton</td><td class="num who">—</td><td><span class="pos p-no">absent</span></td><td class="who">Dr Belhassen, Dr Halfon, Dr Argentina</td></tr>
+        <tr><td class="q">blanchiment dentaire Charenton</td><td class="num who">—</td><td><span class="pos p-no">absent</span></td><td class="who">Dr Halfon, Dr Belhassen</td></tr>
+        <tr><td class="q">dentiste Charenton avis</td><td class="num who">—</td><td><span class="pos p-no">absent</span></td><td class="who">Dr Halfon, Dr Belhassen, Dr Argentina</td></tr>
+        <tr><td class="q">dentiste Saint-Maurice</td><td class="num who">—</td><td><span class="pos p-no">absent</span></td><td class="who">Cabinets de Saint-Maurice</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="note">Volume : recherches par mois, estimées. « — » : volume local trop faible pour être mesuré, mais intention maximale — la personne cherche un praticien.</p>
+    <div class="callout">Ce que tes confrères ont en commun : <b>une page par soin</b>, avec « Charenton-le-Pont » dans le titre. Aujourd'hui, ton site se positionne sur une dizaine de recherches et reçoit environ <b>60 visites par mois</b> depuis Google, presque toutes via ta page d'accueil.</div>
+  </section>
+
+  <section id="ia">
+    <h2><span class="n">6</span>Dans les assistants IA</h2>
+    <p class="head">ChatGPT te cite. <span class="r">Mais il ne sait rien dire de toi.</span></p>
+    <div class="ai">
+      <p class="ask">Question posée : <b>« Je cherche un bon dentiste à Charenton-le-Pont, lequel me conseilles-tu ? »</b></p>
+      <div class="res"><span class="rk g">4ᵉ</span><span class="rt">sur 4 dentistes recommandés</span></div>
+      <p class="d">ChatGPT recommande d'abord <b>Dr Jabbour</b>, pour sa note de 4,9 sur 228 avis. Toi, il ne te décrit que par ta note et ton adresse. Ses sources : Doctolib, PagesJaunes et un annuaire de garde — <b>pas ton site</b>.</p>
+    </div>
+    <div class="ai">
+      <p class="ask">Question posée : <b>« Quel dentiste pour poser un implant dentaire à Charenton-le-Pont ? »</b></p>
+      <div class="res"><span class="rk g">2ᵉ</span><span class="rt">juste après Dr Corcos, spécialisé en implantologie</span></div>
+      <p class="d">Bonne nouvelle, mais regarde comment il t'a trouvé : faute de page implants en français, il a lu <b>ta page en anglais</b>. Il te consacre une ligne générique. Pour Dr Halfon et Dr Belhassen, il cite leur page implants, leur imagerie 3D, leur parcours de soin.</p>
+    </div>
+    <div class="callout">
+      Une IA ne peut décrire que ce qu'elle trouve écrit. <b>Tes confrères lui donnent de la matière, toi presque rien.</b> Et comme ta fiche PagesJaunes n'est pas revendiquée, c'est elle que ChatGPT lit à ta place.
+    </div>
+    <details>
+      <summary>Ce que les IA lisent sur ton site</summary>
+      <div class="dbody">
+        <p><b>Bon :</b> ton site n'interdit l'accès à aucun robot d'IA, et son contenu s'affiche sans dépendre de JavaScript. ChatGPT, Claude et Perplexity peuvent donc le lire entièrement.</p>
+        <p><b>À corriger :</b> la fiche d'identité technique que ton site transmet aux moteurs est présente en double, sans coordonnées GPS, sans ton nom de praticien, sans lien vers Doctolib ou Ameli, et contient une image de démonstration oubliée. C'est elle qui permet à une IA de relier ton site, ta fiche Google et tes annuaires en une seule identité. Cette partie se demande à Webdentiste.</p>
+        <p><b>Absent :</b> aucun fichier de présentation destiné aux IA. C'est une convention récente, utile mais non indispensable.</p>
+        <p><b>Google :</b> sur les recherches testées, Google n'affiche pas de résumé IA pour un dentiste à Charenton — il affiche la carte. La carte reste la priorité.</p>
+      </div>
+    </details>
+  </section>
+
+  <section id="fiche">
+    <h2><span class="n">7</span>Ta fiche Google</h2>
+    <p class="head">Plus d'avis que ta voisine, <span class="r">mais une fiche moins complète</span>.</p>
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th></th><th>Toi</th><th>Dr Halfon · 111 rue de Paris</th></tr></thead>
+      <tbody>
+        <tr><td class="q">Avis</td><td class="num yes">186</td><td class="num">90</td></tr>
+        <tr><td class="q">Note</td><td class="num">4,5</td><td class="num">4,7</td></tr>
+        <tr><td class="q">Photos</td><td class="num">9</td><td class="num">9</td></tr>
+        <tr><td class="q">Catégories renseignées</td><td class="num">5</td><td class="num yes">8</td></tr>
+        <tr><td class="q">Urgences dentaires</td><td class="no">non</td><td class="yes">oui</td></tr>
+        <tr><td class="q">Cabinet d'implants dentaires</td><td class="no">non</td><td class="yes">oui</td></tr>
+        <tr><td class="q">Blanchiment des dents</td><td class="no">non</td><td class="yes">oui</td></tr>
+        <tr><td class="q">Lien vers le site</td><td class="no">http</td><td class="yes">https</td></tr>
+        <tr><td class="q">Fiche revendiquée</td><td class="yes">oui</td><td class="yes">oui</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="callout warn"><b>Tes horaires se contredisent :</b> du lundi au vendredi, 10 h–19 h sur ta fiche Google ; lundi, mercredi et vendredi sur ton site. Un patient qui se présente devant une porte fermée ne revient pas.</div>
+  </section>
+
+  <section id="avis">
+    <h2><span class="n">8</span>Ta réputation</h2>
+    <p class="head">Solide, mais <span class="r">4,5 te place sous les mieux notés</span> — et c'est ce que regardent ChatGPT et la recherche « meilleur dentiste ».</p>
+    <figure class="chart"><figcaption class="ctitle">2ᵉ en nombre d'avis, mais sous la barre des 4,7</figcaption><div class="cv" data-chart="scatter" role="img" aria-label="Nombre d'avis et note des 10 cabinets de Charenton. Dr Lellouche : 186 avis, 4,5, le 2ᵉ plus grand nombre d'avis, mais sous les cabinets notés 4,7 ou plus."></div><details class="data"><summary>Voir les données</summary><div class="dbody"><div class="scroll"><table class="tbl"><thead><tr><th>Cabinet</th><th>Avis</th><th>Note</th></tr></thead><tbody><tr><td>Dr Lellouche (toi)</td><td>186</td><td>4,5</td></tr><tr><td>Dr Jabbour</td><td>228</td><td>4,9</td></tr><tr><td>Dr Marx</td><td>146</td><td>4,8</td></tr><tr><td>Dr Belhassen</td><td>98</td><td>4,8</td></tr><tr><td>Dr Halfon</td><td>90</td><td>4,7</td></tr><tr><td>Dr Argentina</td><td>80</td><td>4,5</td></tr><tr><td>Dr Corcos</td><td>56</td><td>4,7</td></tr><tr><td>Dr Licht</td><td>38</td><td>4,9</td></tr><tr><td>Dr Harroch</td><td>26</td><td>2,2</td></tr><tr><td>Dr Lemaigre</td><td>14</td><td>5,0</td></tr></tbody></table></div></div></details></figure>
+    <div class="stats">
+      <div class="stat s-ok"><b>157</b><span>avis à 5 étoiles sur 186</span></div>
+      <div class="stat s-ok"><b>21 / 25</b><span>avis négatifs datent de 3 ans ou plus</span></div>
+      <div class="stat s-ok"><b>17 / 25</b><span>ont déjà ta réponse</span></div>
+      <div class="stat s-mid"><b>4</b><span>visent d'autres praticiens passés par ton cabinet</span></div>
+      <div class="stat"><b>4</b><span>n'ont aucun texte</span></div>
+      <div class="stat s-warn"><b>37</b><span>nouveaux avis à 5★ pour afficher 4,6</span></div>
+    </div>
+    <figure class="chart"><figcaption class="ctitle">157 de tes 186 avis sont à 5 étoiles</figcaption><div class="cv" data-chart="stars" role="img" aria-label="Répartition des 186 avis : 157 à 5 étoiles, 4 à 4 étoiles, 0 à 3 étoiles, 4 à 2 étoiles, 21 à 1 étoile."></div><details class="data"><summary>Voir les données</summary><div class="dbody"><div class="scroll"><table class="tbl"><thead><tr><th>Étoiles</th><th>Avis</th></tr></thead><tbody><tr><td>5</td><td>157</td></tr><tr><td>4</td><td>4</td></tr><tr><td>3</td><td>0</td></tr><tr><td>2</td><td>4</td></tr><tr><td>1</td><td>21</td></tr></tbody></table></div></div></details></figure>
+    <p class="note">C'est le seul point qu'on ne peut pas accélérer : Google ne supprime pas un avis parce qu'il est sévère, seulement s'il enfreint ses règles. En revanche, <b>une réponse soignée à chaque avis</b> rassure le patient qui lit, et Google en tient compte.</p>
+    <div class="rules">
+      <div class="rule y"><h3>Autorisé</h3><ul><li>Répondre aux avis</li><li>Signaler les avis abusifs à Google</li><li>Rendre ta fiche facile à trouver</li></ul></div>
+      <div class="rule n"><h3>Interdit à un dentiste</h3><ul><li>Demander des avis aux patients</li><li>Offrir une contrepartie</li><li>Révéler quoi que ce soit d'un patient dans une réponse</li></ul></div>
+    </div>
+    <details>
+      <summary>Le cadre déontologique</summary>
+      <div class="dbody">
+        <p>Le décret 2020-1658 interdit l'usage de témoignages de patients à des fins promotionnelles ; une demande systématique d'avis après consultation en relève. Les sanctions ordinales vont de l'avertissement à l'interdiction temporaire d'exercer.</p>
+        <p>Une réponse publique ne doit jamais confirmer qu'une personne est ta patiente ni évoquer un soin : la violation du secret médical expose à un an d'emprisonnement et 15 000 € d'amende.</p>
+        <p>Un avis contenant des allégations fausses et précises peut relever de la diffamation, à condition d'agir dans les trois mois suivant sa publication.</p>
+      </div>
+    </details>
+  </section>
+
+  <section id="site">
+    <h2><span class="n">9</span>Ton site, page par page</h2>
+    <p class="head">285 pages analysées, 418 constats. <span class="r">Ton meilleur contenu est caché.</span></p>
+    <figure class="chart"><figcaption class="ctitle">Deux constats dominent : 178 pages sans description, 124 articles masqués</figcaption><div class="cv" data-chart="site" role="img" aria-label="Constats du site sur 285 pages : Description manquante 178, Articles masqués à Google 124, Niveaux de titres sautés (gabarit) 91, Titre de page trop long 11, Titre de page trop court 6, Contenu trop court 3, Lien cassé 1, Page reliée à aucune autre 1, Titre principal manquant 1."></div><details class="data"><summary>Voir les données</summary><div class="dbody"><div class="scroll"><table class="tbl"><thead><tr><th>Constat</th><th>Pages (sur 285)</th></tr></thead><tbody><tr><td>Description manquante</td><td>178</td></tr><tr><td>Articles masqués à Google</td><td>124</td></tr><tr><td>Niveaux de titres sautés (gabarit)</td><td>91</td></tr><tr><td>Titre de page trop long</td><td>11</td></tr><tr><td>Titre de page trop court</td><td>6</td></tr><tr><td>Contenu trop court</td><td>3</td></tr><tr><td>Lien cassé</td><td>1</td></tr><tr><td>Page reliée à aucune autre</td><td>1</td></tr><tr><td>Titre principal manquant</td><td>1</td></tr></tbody></table></div></div></details></figure>
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>Constat</th><th class="c">Pages</th><th>Statut</th></tr></thead>
+      <tbody>
+        <tr><td>Articles masqués à Google</td><td class="num c">124</td><td><span class="st st-c">critique</span></td></tr>
+        <tr><td>Lien cassé</td><td class="num c">1</td><td><span class="st st-c">critique</span></td></tr>
+        <tr><td>Description manquante</td><td class="num c">178</td><td><span class="st st-a">à corriger</span></td></tr>
+        <tr><td>Page reliée à aucune autre</td><td class="num c">1</td><td><span class="st st-a">à corriger</span></td></tr>
+        <tr><td>Contenu trop court</td><td class="num c">3</td><td><span class="st st-a">à corriger</span></td></tr>
+        <tr><td>Titre principal manquant</td><td class="num c">1</td><td><span class="st st-a">à corriger</span></td></tr>
+        <tr><td>Titre de page trop long / trop court</td><td class="num c">11 / 6</td><td><span class="st st-m">mineur</span></td></tr>
+        <tr><td>Niveaux de titres sautés (gabarit)</td><td class="num c">91</td><td><span class="st st-m">plateforme</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>Tes articles à remettre en avant</h3>
+    <p class="note" style="margin:0 0 12px">Sur les 124 articles masqués, une grande partie est du contenu général fourni par ta plateforme à tous ses clients : le masquer est normal. Mais ceux-ci sont propres à ton cabinet, et ce sont exactement ceux que cherchent les patients.</p>
+    <div class="chips">
+      <span class="chip">Dentiste Métro Liberté</span>
+      <span class="chip">Dentiste St Maurice</span>
+      <span class="chip">Honoraires et remboursements</span>
+      <span class="chip">Hygiène et asepsie au cabinet</span>
+      <span class="chip">Les facettes en céramique</span>
+      <span class="chip">La couronne dentaire céramique</span>
+      <span class="chip">Les bridges et ponts dentaires</span>
+      <span class="chip">Inlay et onlay</span>
+      <span class="chip">Implant en 2 temps, pilier titane</span>
+      <span class="chip">Couronne sur implant</span>
+      <span class="chip">Implant et régénération osseuse</span>
+      <span class="chip">Implantologie sans incision</span>
+      <span class="chip">Gouttières transparentes</span>
+      <span class="chip">Technique Invisalign</span>
+    </div>
+
+    <details>
+      <summary>Les constats secondaires</summary>
+      <div class="dbody">
+        <ul>
+          <li><b>Fautes sur l'accueil :</b> « recherches » pour recherchés, « C est » pour C'est, « a Charenton » pour à Charenton, « est a 1 mn » pour est à 1 min ; « obstrurer » dans l'article sur le scellement des sillons.</li>
+          <li><b>Urgences :</b> une seule phrase sous « Service de garde », sans solution hors horaires.</li>
+          <li><b>Le praticien :</b> aucun contenu sous ton nom, ni parcours, ni photo légendée.</li>
+          <li><b>Accueil :</b> une image sans texte descriptif.</li>
+          <li><b>Diaporama :</b> page faible, à retirer de Google ou à fusionner avec « Le cabinet ».</li>
+          <li><b>Dentiste St Maurice :</b> à garder seulement si elle dit quelque chose de propre à Saint-Maurice.</li>
+          <li><b>Téléphone :</b> affiché sous deux formats ; garder 01 43 68 07 80 à l'écran.</li>
+          <li><b>Pages trop courtes :</b> cas cliniques (144 mots), prise de rendez-vous (134), diaporama (133).</li>
+        </ul>
+        <p><b>Ce qui va bien :</b> temps de réponse de 161 ms, HTTPS, une adresse unique par page, des titres uniques et locaux.</p>
+      </div>
+    </details>
+  </section>
+
+  <section id="liens">
+    <h2><span class="n">10</span>Les sites qui renvoient vers toi</h2>
+    <p class="head">161 liens depuis 77 sites — <span class="r">un chiffre correct qui cache un profil faible</span>.</p>
+    <div class="stats">
+      <div class="stat"><b>161</b><span>liens vers ton site</span></div>
+      <div class="stat"><b>77</b><span>sites différents</span></div>
+      <div class="stat s-warn"><b>100 %</b><span>pointent vers ta page d'accueil</span></div>
+    </div>
+    <figure class="chart"><figcaption class="ctitle">100 % de tes 161 liens entrants pointent vers ta page d'accueil</figcaption><div class="cv" data-chart="links" role="img" aria-label="161 carrés, un par lien entrant : tous les 161 pointent vers la page d'accueil, aucun vers une autre page."></div><p class="clegend"><span><span class="sw sw-home"></span>vers ta page d'accueil : 161</span><span><span class="sw sw-other"></span>vers une autre page : 0</span></p><details class="data"><summary>Voir les données</summary><div class="dbody"><div class="scroll"><table class="tbl"><thead><tr><th>Liens</th><th>Sites</th><th>Vers la page d'accueil</th></tr></thead><tbody><tr><td>161</td><td>77</td><td>100 %</td></tr></tbody></table></div></div></details></figure>
+    <p class="note">La plupart viennent d'annuaires générés automatiquement, de faible qualité. Google les ignore déjà : <b>ils ne te pénalisent pas, mais ne t'aident pas</b>. Les liens les plus utiles — localitybiz.fr, dentistepro.fr, medecin-pres-de-moi.fr, keskeces.com — ne transmettent pas de poids à Google.</p>
+    <div class="callout">Ce qui compterait vraiment : quelques <b>liens locaux et réels</b> — la mairie de Charenton, les commerces du quartier, ton laboratoire de prothèse, les associations locales.</div>
+  </section>
+
+  <section id="infos">
+    <h2><span class="n">11</span>Tes informations en ligne</h2>
+    <p class="head">Google et les IA comparent ce que disent les sites. <span class="r">Quand ça diverge, ils te font moins confiance.</span></p>
+    <div class="scroll">
+    <table class="tbl">
+      <tbody>
+        <tr><td class="q">Horaires</td><td class="who">5 jours sur Google, 3 sur ton site</td><td><span class="st st-c">divergent</span></td></tr>
+        <tr><td class="q">Ancienneté</td><td class="who">33 ans sur ton site, 30 sur Doctolib</td><td><span class="st st-a">divergent</span></td></tr>
+        <tr><td class="q">Formations</td><td class="who">D.U. d'esthétique et musicothérapie sur Doctolib seulement</td><td><span class="st st-a">incomplet</span></td></tr>
+        <tr><td class="q">PagesJaunes</td><td class="who">Fiche non revendiquée — et lue par ChatGPT</td><td><span class="st st-a">à revendiquer</span></td></tr>
+        <tr><td class="q">Adresse, téléphone</td><td class="who">Identiques partout</td><td><span class="st st-ok">conforme</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section id="ou">
+    <h2><span class="n">12</span>Ce qui se corrige, et où</h2>
+    <p class="head">La majorité se règle sur ta plateforme actuelle.</p>
+    <div class="three">
+      <div class="col a">
+        <h3>Sur ta plateforme</h3>
+        <ul>
+          <li>Compléter ta fiche Google</li>
+          <li>Harmoniser tes infos</li>
+          <li>Revendiquer PagesJaunes</li>
+          <li>Rendre visibles tes articles</li>
+          <li>Titres et descriptions</li>
+          <li>Un contenu par soin, en article</li>
+          <li>Compléter la page praticien</li>
+          <li>Répondre aux avis</li>
+        </ul>
+      </div>
+      <div class="col b">
+        <h3>À demander à Webdentiste</h3>
+        <ul>
+          <li>Fiche d'identité technique</li>
+          <li>Déclaration des pages anglaise et espagnole</li>
+          <li>Articles dans le plan du site</li>
+          <li>Niveaux de titres du gabarit</li>
+        </ul>
+      </div>
+      <div class="col c">
+        <h3>Hors d'atteinte aujourd'hui</h3>
+        <ul>
+          <li>De vraies pages de soin, avec leur propre structure</li>
+          <li>Une maîtrise complète de ce que lisent Google et les IA</li>
+          <li>Un site dont tu es entièrement propriétaire</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Les limites de la troisième colonne tiennent à la plateforme. Elles ne se lèvent qu'avec un site que tu maîtrises entièrement — une option à garder en tête, une fois les premiers résultats mesurés.</p>
+  </section>
+
+  <section id="confirmer">
+    <h2><span class="n">13</span>À confirmer avec toi</h2>
+    <ol class="qs">
+      <li>Ton année d'installation <span>— 30 ou 33 ans : il faut un seul chiffre partout</span></li>
+      <li>Tes horaires réels <span>— le cabinet est-il fermé le mardi et le jeudi ?</span></li>
+      <li>Les catégories « Orthodontiste » et « Parodontiste spécialiste » de ta fiche <span>— à garder seulement si elles correspondent à une qualification reconnue</span></li>
+      <li>Ton D.U. de dentisterie esthétique <span>— à afficher sur ton site et ta fiche ?</span></li>
+      <li>Carte Vitale et tarifs conventionnels <span>— à confirmer pour la page honoraires</span></li>
+      <li>L'accès aux personnes à mobilité réduite <span>— annoncé sur un annuaire : est-ce exact ?</span></li>
+      <li>Un numéro de garde <span>— pour les dimanches et jours fériés</span></li>
+      <li>Les articles que tu as rédigés toi-même <span>— ce sont ceux qu'on remet en avant</span></li>
+    </ol>
+  </section>
+
+  <section id="methode">
+    <h2><span class="n">14</span>Méthode et suivi</h2>
+    <div class="scroll">
+    <table class="tbl">
+      <tbody>
+        <tr><td class="q">Point de départ</td><td class="who">Cet audit, du 24 au 27 septembre 2026</td></tr>
+        <tr><td class="q">Première mesure</td><td class="who">30 jours après les corrections, mêmes recherches, mêmes points</td></tr>
+        <tr><td class="q">Seconde mesure</td><td class="who">À 90 jours</td></tr>
+        <tr><td class="q">Délai réaliste</td><td class="who">Aucun effet visible avant une trentaine de jours</td></tr>
+        <tr><td class="q">Non vérifié ici</td><td class="who">Rendu mobile détaillé ; contenu complet des articles et des cas cliniques</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <div class="end">
+    <p>Ta réputation existe déjà. Il reste à la rendre visible.</p>
+    <span>Une proposition chiffrée accompagne cet audit, avec la même mesure refaite à 30 et 90 jours pour comparer.</span>
+  </div>
+
+  </main>
+
+  <footer>
+    <p>Recherches Google effectuées du 24 au 27 septembre 2026, depuis Charenton-le-Pont, sur mobile. Tests ChatGPT du 27 septembre 2026. Fiche Google et avis relevés le 25 septembre 2026.</p>
+    <p>Volumes et trafic : estimations, non issues de ta Google Search Console. Les réponses des IA et les positions Google varient d'un jour à l'autre et selon l'endroit d'où l'on cherche. Aucune position ne peut être garantie.</p>
+    <p>Ailive.fr — Emmanuel Mesguich</p>
+  </footer>
+
+</div>
+<script>
+(function(){
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+
+  /* Données — reprises telles quelles de l'audit. Aucune autre source. */
+  var D = {
+    scores: { "Réputation":4, "Site, technique":4, "Assistants IA":3, "Infos en ligne":3, "Recherche Google":2, "Carte Google":2 },
+    matrix: [
+      [1,"Fiche Google incomplète",0,"faible"],[2,"Horaires contradictoires",0,"faible"],[3,"Articles masqués",0,"faible"],
+      [4,"Aucune page par soin",0,"important"],[5,"Infos divergentes",0,"faible"],[6,"Fiche d'identité technique",0,"faible"],
+      [7,"Descriptions manquantes",1,"faible"],[8,"Accueil sans titre principal",1,"faible"],[9,"Page praticien vide",1,"faible"],
+      [10,"Urgences hors horaires",1,"faible"],[11,"Avis sans réponse",1,"faible"],[12,"Pages anglaise et espagnole",1,"faible"],
+      [13,"Articles hors du plan du site",1,"faible"],[14,"Lien cassé",2,"faible"],[15,"Pages trop courtes",2,"faible"],
+      [16,"Titres trop longs ou courts",2,"faible"],[17,"Fautes d'orthographe",2,"faible"],[18,"Image sans texte",2,"faible"],
+      [19,"Téléphone en deux formats",2,"faible"],[20,"Niveaux de titres (gabarit)",2,"main"],[21,"Liens entrants faibles",2,"aucun"]
+    ],
+    // null = absent des 20 premiers. Nord en haut, cabinet au centre.
+    grid: [[null,10,null],[14,1,18],[null,13,20]],
+    positions: [
+      ["Dr Lellouche",1],["dentiste Charenton-le-Pont",6],["aligneurs, orthodontie adulte",12],
+      ["urgence dentaire Charenton",15],["dentiste Charenton",22],["implant dentaire Charenton",null],
+      ["facettes dentaires Charenton",null],["blanchiment dentaire Charenton",null],
+      ["dentiste Charenton avis",null],["dentiste Saint-Maurice",null]
+    ],
+    // [nom, avis, note, placement de l'étiquette]
+    cabinets: [
+      ["Dr Lellouche",186,4.5,"me"],["Dr Jabbour",228,4.9,"left"],["Dr Marx",146,4.8,"up"],
+      ["Dr Belhassen",98,4.8,"left"],["Dr Halfon",90,4.7,"down"],["Dr Argentina",80,4.5,"down"],
+      ["Dr Corcos",56,4.7,"up"],["Dr Licht",38,4.9,"up"],["Dr Harroch",26,2.2,"right"],["Dr Lemaigre",14,5.0,"right"]
+    ],
+    stars: [[5,157],[4,4],[3,0],[2,4],[1,21]],
+    site: [
+      ["Description manquante",178],["Articles masqués à Google",124],["Niveaux de titres sautés (gabarit)",91],
+      ["Titre de page trop long",11],["Titre de page trop court",6],["Contenu trop court",3],
+      ["Lien cassé",1],["Page reliée à aucune autre",1],["Titre principal manquant",1]
+    ],
+    sitePages: 285,
+    links: { total:161, home:161 }
+  };
+
+  function el(tag, attrs, parent, text){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function tip(node, text){ el("title", {}, node, text); return node; }
+  function svgIn(box, w, h){
+    box.textContent = "";
+    return el("svg", { viewBox:"0 0 "+w+" "+h, width:w, height:h, "aria-hidden":"true", focusable:"false" }, box);
+  }
+  function fr(n){ return String(n).replace(".", ","); }
+  function ord(n){ return n === 1 ? "1ᵉʳ" : n + "ᵉ"; }
+  function status(rank){ return rank == null || rank > 20 ? "crit" : rank <= 10 ? "ok" : "mid"; }
+  // Marque de statut : plein = bon, moitié = moyen, contour = critique (lisible en niveaux de gris)
+  function mark(g, cx, cy, r, st){
+    var grp = el("g", { "class":"mk mk-"+st }, g);
+    el("circle", { cx:cx, cy:cy, r:r, "class":"mk-ring" }, grp);
+    if (st === "mid") el("path", { d:"M"+(cx-r)+" "+cy+" A"+r+" "+r+" 0 0 0 "+(cx+r)+" "+cy+" Z", "class":"mk-fill" }, grp);
+    return grp;
+  }
+
+  var R = {};
+
+  /* 1 — Vue d'ensemble : une jauge segmentée par domaine */
+  R.score = function(box){
+    var v = +box.dataset.score, w = box.clientWidth, h = 16, lab = 34;
+    var gap = 3, sw = (w - lab - gap*4) / 5, st = v >= 4 ? "ok" : v === 3 ? "mid" : "crit";
+    var s = svgIn(box, w, h);
+    for (var i = 0; i < 5; i++){
+      el("rect", { x:i*(sw+gap), y:2, width:sw, height:12, rx:3, "class": i < v ? "seg grow seg-"+st : "seg seg-off", style:"--d:"+(i*60)+"ms" }, s);
+    }
+    el("text", { x:w, y:13, "text-anchor":"end", "class":"t-val" }, s, v+"/5");
+  };
+
+  /* 2 — Matrice impact × effort */
+  R.matrix = function(box){
+    var W = box.clientWidth, left = W < 480 ? 58 : 76, top = 24, T = 30, g = 6, pad = 12, sep = 10;
+    var cols = [["aucun",["aucun"],1],["faible",["faible"],2.8],["important",["important"],1.25],["main",["hors de","ta main"],1.25]];
+    var rows = ["Élevé","Moyen","Faible"];
+    var avail = W - left - 3*3 - sep, tw = cols.reduce(function(a,c){ return a + c[2]; }, 0);
+    var cx = [], cw = [], x = left;
+    cols.forEach(function(c,i){ if (i === 3) x += sep; cx.push(x); cw.push(avail*c[2]/tw); x += avail*c[2]/tw + 3; });
+    var cells = rows.map(function(_, ri){ return cols.map(function(c){ return D.matrix.filter(function(m){ return m[2] === ri && m[3] === c[0]; }); }); });
+    var cap = cw.map(function(w){ return Math.max(1, Math.floor((w - pad*2 + g) / (T + g))); });
+    var rh = cells.map(function(row, ri){
+      var lines = Math.max.apply(null, row.map(function(items, ci){ return Math.ceil(items.length / cap[ci]) || 1; }));
+      return lines*(T+g) - g + pad*2 + (ri === 0 ? 20 : 0);
+    });
+    var H = top + rh.reduce(function(a,b){ return a+b; }, 0) + 6 + 44;
+    var s = svgIn(box, W, H);
+    el("text", { x:0, y:12, "class":"t-axis" }, s, "IMPACT");
+    var y = top;
+    rows.forEach(function(rname, ri){
+      el("text", { x:0, y:y + rh[ri]/2 + 5, "class":"t-lab" }, s, rname);
+      cols.forEach(function(c, ci){
+        var quick = ri === 0 && c[0] === "faible";
+        el("rect", { x:cx[ci], y:y, width:cw[ci], height:rh[ri], rx:8, "class": quick ? "cell-q" : "cell" }, s);
+        var items = cells[ri][ci], off = quick ? 20 : 0;
+        if (quick) el("text", { x:cx[ci] + pad, y:y + 20, "class":"t-zone" }, s, "Gains rapides");
+        items.forEach(function(m, k){
+          var line = Math.floor(k / cap[ci]), inLine = Math.min(cap[ci], items.length - line*cap[ci]);
+          var col = k % cap[ci], rowW = inLine*(T+g) - g;
+          var tx = cx[ci] + (cw[ci] - rowW)/2 + col*(T+g), ty = y + off + pad + line*(T+g) + (rh[ri] - off - pad*2 - (Math.ceil(items.length/cap[ci])*(T+g)-g))/2;
+          var t = el("g", { "class": (quick ? "tok tok-q" : "tok") + " pop", style:"--d:"+((m[0]-1)*22)+"ms" }, s);
+          el("rect", { x:tx, y:ty, width:T, height:T, rx:7 }, t);
+          el("text", { x:tx + T/2, y:ty + T/2 + 5, "text-anchor":"middle" }, t, m[0]);
+          tip(t, m[0] + " · " + m[1] + " — impact " + rname.toLowerCase() + ", effort " + (c[0] === "main" ? "hors de ta main" : c[0]));
+        });
+      });
+      y += rh[ri] + 3;
+    });
+    y += 16;
+    cols.forEach(function(c, ci){
+      c[1].forEach(function(line, li){ el("text", { x:cx[ci] + cw[ci]/2, y:y + li*15, "text-anchor":"middle", "class":"t-lab" }, s, line); });
+    });
+    el("text", { x:0, y:y, "class":"t-axis" }, s, "EFFORT");
+  };
+
+  /* 3 — Carte de chaleur 3 × 3 */
+  R.heat = function(box){
+    var S = Math.min(box.clientWidth, 380), c = S/2, sp = S*0.3, r = Math.min(27, sp*0.27);
+    var s = svgIn(box, S, S);
+    el("circle", { cx:c, cy:c, r:sp, "class":"ring" }, s);
+    // mesure au pied à coulisse entre le cabinet et le point ouest : 600 m
+    var my = c - sp/2, mx0 = c - sp, mx1 = c;
+    el("path", { d:"M"+mx0+" "+(my-4)+" v8 M"+mx1+" "+(my-4)+" v8 M"+mx0+" "+my+" H"+mx1, "class":"measure" }, s);
+    el("text", { x:(mx0+mx1)/2, y:my-8, "text-anchor":"middle", "class":"t-small halo" }, s, "600 m");
+    var n = el("g", { "class":"north" }, s);
+    el("path", { d:"M"+(S-16)+" 22 L"+(S-10)+" 8 L"+(S-4)+" 22", "class":"north-arrow" }, n);
+    el("text", { x:S-10, y:38, "text-anchor":"middle", "class":"t-axis" }, n, "N");
+    D.grid.forEach(function(row, ri){
+      row.forEach(function(v, ci){
+        var x = c + (ci-1)*sp, y = c + (ri-1)*sp, st = v == null ? "abs" : v <= 3 ? "ok" : "mid";
+        var dist = Math.abs(ri-1) + Math.abs(ci-1);
+        var g = el("g", { "class":"hp pop hp-"+st, style:"--d:"+(dist*110)+"ms" }, s);
+        el("circle", { cx:x, cy:y, r:r }, g);
+        el("text", { x:x, y:y + (v == null ? 4 : 6), "text-anchor":"middle" }, g, v == null ? "absent" : ord(v));
+        tip(g, (ri === 1 && ci === 1 ? "Au cabinet" : "Point à 600 m") + " : " + (v == null ? "absent des 20 premiers" : ord(v)));
+      });
+    });
+    el("text", { x:c, y:c + r + 16, "text-anchor":"middle", "class":"t-small halo" }, s, "cabinet");
+  };
+
+  /* 4 — Échelle des positions */
+  R.ladder = function(box){
+    var W = box.clientWidth, k = 17, top = 12, ax = 46, px = 62, lx = 76, maxR = 22;
+    var y = function(r){ return top + (r-1)*k; };
+    var absent = D.positions.filter(function(p){ return p[1] == null; });
+    var aTop = y(maxR) + 30, H = aTop + 30 + absent.length*24 + 6;
+    var s = svgIn(box, W, H);
+    el("rect", { x:ax, y:y(1)-k/2, width:W-ax, height:k*3, rx:6, "class":"band-ok" }, s);
+    el("text", { x:W-8, y:y(2)+5, "text-anchor":"end", "class":"t-zone" }, s, "Top 3");
+    el("line", { x1:ax, x2:ax, y1:y(1), y2:y(maxR), "class":"axis" }, s);
+    [1,3,10,20].forEach(function(r){
+      el("line", { x1:ax-4, x2:ax, y1:y(r), y2:y(r), "class":"axis" }, s);
+      el("text", { x:ax-8, y:y(r)+4, "text-anchor":"end", "class":"t-tick" }, s, ord(r));
+    });
+    var ly = y(10) + k/2;
+    el("line", { x1:ax, x2:W, y1:ly, y2:ly, "class":"ref" }, s);
+    el("text", { x:W-8, y:ly-6, "text-anchor":"end", "class":"t-small" }, s, "1ʳᵉ page de Google");
+    D.positions.filter(function(p){ return p[1] != null; }).forEach(function(p){
+      var g = el("g", { "class":"pop", style:"--d:"+(p[1]*14)+"ms" }, s);
+      mark(g, px, y(p[1]), 6, status(p[1]));
+      var t = el("text", { x:lx, y:y(p[1])+4, "class":"t-lab" }, g);
+      el("tspan", { "class":"t-strong" }, t, ord(p[1]) + "  ");
+      el("tspan", {}, t, p[0]);
+      tip(g, p[0] + " : " + ord(p[1]));
+    });
+    el("rect", { x:0, y:aTop, width:W, height:H - aTop, rx:8, "class":"band-crit" }, s);
+    el("text", { x:12, y:aTop + 20, "class":"t-axis t-crit" }, s, "ABSENT");
+    absent.forEach(function(p, i){
+      var yy = aTop + 44 + i*24, g = el("g", { "class":"pop", style:"--d:"+(360+i*50)+"ms" }, s);
+      mark(g, px, yy - 4, 6, "crit");
+      el("text", { x:lx, y:yy, "class":"t-lab" }, g, p[0]);
+      tip(g, p[0] + " : absent");
+    });
+  };
+
+  /* 5 — Nuage avis × note, axe des notes coupé pour l'unique note basse */
+  R.scatter = function(box){
+    var W = box.clientWidth, L = 40, Rm = 14, T = 14, PH = 270, brk = 22, BH = 34, B = 40;
+    var X = function(v){ return L + v/250*(W-L-Rm); };
+    var Y = function(v){ return T + (5.05 - v)/(5.05 - 4.4)*PH; };
+    var yLow = T + PH + brk + BH/2, H = T + PH + brk + BH + B;
+    var s = svgIn(box, W, H);
+    el("rect", { x:L, y:Y(5.05), width:W-L-Rm, height:Y(4.7)-Y(5.05), "class":"band-ok" }, s);
+    el("text", { x:W-Rm-6, y:Y(5.05)+16, "text-anchor":"end", "class":"t-zone" }, s, "4,7 ou plus");
+    [4.4,4.5,4.6,4.7,4.8,4.9,5.0].forEach(function(v){
+      el("line", { x1:L, x2:W-Rm, y1:Y(v), y2:Y(v), "class":"grid" }, s);
+      el("text", { x:L-8, y:Y(v)+4, "text-anchor":"end", "class":"t-tick" }, s, fr(v.toFixed(1)));
+    });
+    el("line", { x1:L, x2:W-Rm, y1:yLow, y2:yLow, "class":"grid" }, s);
+    el("text", { x:L-8, y:yLow+4, "text-anchor":"end", "class":"t-tick" }, s, "2,2");
+    // coupure d'axe
+    var by = T + PH + brk/2;
+    el("path", { d:"M"+(L-6)+" "+(by-1)+" l12 -5 M"+(L-6)+" "+(by+5)+" l12 -5", "class":"brk" }, s);
+    var base = H - B + 8;
+    el("line", { x1:L, x2:W-Rm, y1:base, y2:base, "class":"axis" }, s);
+    [0,50,100,150,200,250].forEach(function(v){
+      el("text", { x:X(v), y:base+18, "text-anchor":"middle", "class":"t-tick" }, s, v);
+    });
+    el("text", { x:W-Rm, y:base+34, "text-anchor":"end", "class":"t-small" }, s, "nombre d'avis →");
+    el("text", { x:0, y:T-4 < 10 ? 10 : T-4, "class":"t-small" }, s, "note");
+    D.cabinets.slice().reverse().forEach(function(c){
+      var x = X(c[1]), y = c[2] < 4 ? yLow : Y(c[2]), me = c[3] === "me";
+      var g = el("g", { "class": (me ? "pt pt-me" : "pt") + " pop", style:"--d:"+(me ? 520 : c[1]*1.6)+"ms" }, s);
+      el("circle", { cx:x, cy:y, r: me ? 7 : 5 }, g);
+      var o = { up:[0,-12,"middle"], down:[0,20,"middle"], left:[-11,4,"end"], right:[11,4,"start"], me:[0,24,"middle"] }[c[3]];
+      el("text", { x:x+o[0], y:y+o[1], "text-anchor":o[2], "class": me ? "t-strong halo" : "t-small halo" }, g, c[0]);
+      if (me) el("text", { x:x, y:y+40, "text-anchor":"middle", "class":"t-small halo" }, g, c[1] + " avis · " + fr(c[2]));
+      tip(g, c[0] + " : " + c[1] + " avis, note " + fr(c[2].toFixed(1)));
+    });
+  };
+
+  /* Barres horizontales partagées par 6 et 7 */
+  function hbars(box, rows, scaleMax, opts){
+    var W = box.clientWidth, stacked = opts.stacked, rowH = stacked ? 46 : 32, lab = stacked ? 0 : 48, valW = 44;
+    var H = rows.length*rowH + (opts.foot ? 26 : 0);
+    var s = svgIn(box, W, H), bw = W - lab - valW;
+    if (opts.track) rows.forEach(function(r, i){
+      var by = i*rowH + (stacked ? 24 : 9);
+      el("rect", { x:lab, y:by, width:bw, height:12, rx:4, "class":"track" }, s);
+    });
+    rows.forEach(function(r, i){
+      var by = i*rowH + (stacked ? 24 : 9), w = r[1] / scaleMax * bw;
+      var g = el("g", {}, s);
+      if (stacked) el("text", { x:0, y:i*rowH + 16, "class":"t-lab" }, g, r[0]);
+      else el("text", { x:0, y:by+11, "class":"t-lab" }, g, r[0]);
+      if (r[1] > 0) el("rect", { x:lab, y:by, width:Math.max(w, 3), height:12, rx:4, "class":"grow bar-"+(opts.cls(r, i)), style:"--d:"+(i*50)+"ms" }, g);
+      el("text", { x:lab + Math.max(w, 0) + 8, y:by+11, "class":"t-val" }, g, r[1]);
+      tip(g, r[0] + " : " + r[1]);
+    });
+    if (opts.foot) {
+      var fy = H - 6;
+      el("text", { x:lab, y:fy, "class":"t-small" }, s, "0");
+      el("text", { x:lab + bw, y:fy, "text-anchor":"end", "class":"t-small" }, s, opts.foot);
+    }
+  }
+
+  /* 6 — Répartition des étoiles */
+  R.stars = function(box){
+    hbars(box, D.stars.map(function(r){ return [r[0] + " ★", r[1]]; }), 186, {
+      cls: function(r, i){ return i === 0 ? "hi" : "lo"; }
+    });
+  };
+
+  /* 7 — Constats du site, sur 285 pages */
+  R.site = function(box){
+    hbars(box, D.site, D.sitePages, { stacked:true, track:true, foot:"285 pages",
+      cls: function(r, i){ return i < 2 ? "hi" : "lo"; } });
+  };
+
+  /* 8 — Liens entrants : 161 carrés, tous vers l'accueil */
+  R.links = function(box){
+    var W = box.clientWidth, c = 12, g = 3, cols = Math.max(10, Math.floor((W + g) / (c + g)));
+    var rows = Math.ceil(D.links.total / cols), s = svgIn(box, W, rows*(c+g) - g);
+    for (var i = 0; i < D.links.total; i++){
+      el("rect", { x:(i%cols)*(c+g), y:Math.floor(i/cols)*(c+g), width:c, height:c, rx:2, "class": (i < D.links.home ? "wf-home" : "wf-other") + " pop", style:"--d:"+(((i%cols) + Math.floor(i/cols)*3)*9)+"ms" }, s);
+    }
+  };
+
+  function draw(box){
+    var w = box.clientWidth;
+    if (!w || box._w === w) return;
+    box._w = w;
+    R[box.dataset.chart](box);
+  }
+  var figs = [].slice.call(document.querySelectorAll("figure.chart"));
+  var still = !("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!still) {
+    document.documentElement.classList.add("anim");
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.25 });
+    figs.forEach(function(f){ io.observe(f); });
+  }
+
+  var closed = [];
+  addEventListener("beforeprint", function(){
+    closed = [].slice.call(document.querySelectorAll("details:not([open])"));
+    closed.forEach(function(d){ d.open = true; });
+    figs.forEach(function(f){ f.classList.add("in"); });
+  });
+  addEventListener("afterprint", function(){ closed.forEach(function(d){ d.open = false; }); });
+
+  var boxes = [].slice.call(document.querySelectorAll("[data-chart]"));
+  boxes.forEach(draw);
+  if ("ResizeObserver" in window) {
+    var ro = new ResizeObserver(function(entries){ entries.forEach(function(e){ draw(e.target); }); });
+    boxes.forEach(function(b){ ro.observe(b); });
+  }
+})();
+</script>
+</body>
+</html>
