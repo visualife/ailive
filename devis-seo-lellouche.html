@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Devis — Visibilité Google et IA du cabinet</title>
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400..700&family=Fraunces:opsz,wght@9..144,300..500&family=Red+Hat+Mono:wght@500&display=swap">
+<!-- Chiffres seuls (zéro sans barre) : Hanken Grotesk, sous-ensemble 0-9 via text= -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400..700&display=swap&text=0123456789">
+<style>
+  /* Même charte que l'audit — table lumineuse, chiffres traités comme des mesures.
+     Gris relevés pour tenir 7:1 (texte) et 4,5:1 (mentions) sur toutes les surfaces. */
+  :root{
+    --bg:#141d27; --panel:#1c2835; --panel-2:#233142; --line:#2e3e50;
+    --ink:#e9eff5; --dim:#b8c5d2; --faint:#9aabbc;
+    /* turquoise et violet repris du site du cabinet ; violet éclairci pour rester lisible sur fond sombre */
+    --ok:#21adcd; --ok-bg:#172f3a; --on-ok:#08202a;
+    --violet:#733ad5; --violet-ink:#b597f5; --violet-bg:#241f3d;
+    --ok-ink:#7fd6ea; /* turquoise éclairci pour le texte courant (9:1 sur carte) */
+    --display:"Fraunces",Georgia,"Times New Roman",serif;
+    --text:"Hanken Grotesk","Atkinson Hyperlegible Next",Verdana,"Segoe UI",sans-serif;
+    --mono:"Red Hat Mono",ui-monospace,"SF Mono","Cascadia Mono",Consolas,"Liberation Mono",monospace;
+    color-scheme:dark;
+  }
+  html{-webkit-text-size-adjust:100%}
+  *{box-sizing:border-box}
+  body{
+    margin:0;color:var(--ink);font-family:var(--text);font-size:1.0625rem;line-height:1.6;
+    background:var(--bg) radial-gradient(120% 60% at 50% -10%,#1d2a38 0%,rgba(20,29,39,0) 60%) no-repeat;
+    font-variant-numeric:lining-nums;
+  }
+  .wrap{max-width:800px;margin:0 auto;padding:64px 28px 72px}
+  p,li{text-wrap:pretty}
+  strong{font-weight:700}
+  :focus-visible{outline:2px solid var(--ok);outline-offset:3px;border-radius:4px}
+
+  /* ─── En-tête ─── */
+  .brand{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px 20px;margin:0 0 28px;font-size:0.9375rem}
+  .brand b{font-family:var(--display);font-weight:500;font-size:1.25rem;letter-spacing:-.01em}
+  .brand span{color:var(--dim);letter-spacing:.02em}
+  h1{font-family:var(--display);font-optical-sizing:auto;font-weight:300;font-size:clamp(2.25rem,7.5vw,3.5rem);line-height:1.05;letter-spacing:-.025em;margin:0 0 16px;text-wrap:balance}
+  .lead{font-size:1.125rem;color:var(--dim);max-width:34em;margin:0 0 28px}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 56px;padding:0;list-style:none}
+  .pills li{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;line-height:1.35}
+  .pills small{display:block;font-size:0.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-weight:600}
+  .pills span{font-size:0.9375rem;font-weight:600;font-variant-numeric:tabular-nums}
+
+  /* ─── Titres de section : libellé + filet, comme l'audit ─── */
+  section{margin-bottom:64px}
+  h2{display:flex;align-items:center;gap:14px;font-size:0.8125rem;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);font-weight:600;margin:0 0 20px}
+  h2::after{content:"";flex:1;height:1px;background:var(--line)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+
+  /* ─── Parties ─── */
+  .parties{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:64px}
+  .parties h2{margin-bottom:10px}
+  .parties p{margin:0;color:var(--dim);font-size:0.9375rem;line-height:1.55}
+  .parties p b{display:block;color:var(--ink);font-size:1.0625rem;font-weight:700}
+
+  /* ─── Ce qui est compris ─── */
+  .groups{display:grid;gap:12px}
+  .grp h3{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-family:var(--display);font-weight:500;font-size:1.25rem;letter-spacing:-.01em}
+  .grp h3 svg{flex:none;width:24px;height:24px;color:var(--ok)}
+  .grp ul{margin:0;padding:0;list-style:none}
+  .grp li{position:relative;padding:9px 0 9px 20px;border-top:1px solid var(--line);color:var(--dim);font-size:0.9688rem;line-height:1.5}
+  .grp li:first-child{border-top:0}
+  .grp li::before{content:"";position:absolute;left:2px;top:.95em;width:7px;height:7px;border:1.5px solid var(--ok);border-radius:2px}
+  .grp li strong{color:var(--ink)}
+  .tag{display:inline-block;margin-left:4px;padding:1px 8px;border-radius:5px;background:var(--ok-bg);color:var(--ok);font-size:0.8125rem;font-weight:700;vertical-align:1px}
+
+  /* ─── Ensemble, chez toi ─── */
+  .together{background:var(--violet-bg);border:1px solid color-mix(in srgb,var(--violet) 70%,transparent);border-radius:18px;padding:28px 30px;display:grid;grid-template-columns:auto 1fr;gap:6px 20px}
+  .together svg{grid-row:span 2;width:44px;height:44px;color:var(--violet-ink);margin-top:4px}
+  .together h2{display:block;margin:0;font-family:var(--display);font-optical-sizing:auto;font-size:1.75rem;font-weight:400;letter-spacing:-.015em;text-transform:none;color:var(--ink);line-height:1.2}
+  .together h2::after{display:none}
+  .together p{margin:0;font-size:1.125rem;line-height:1.6}
+
+  /* ─── Montant ─── */
+  .price{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+  .price th{text-align:left;font-weight:400;color:var(--dim);padding:12px 12px 12px 0}
+  .price td{padding:12px 0;text-align:right;white-space:nowrap}
+  .price th{hyphens:auto}
+  .price td.u{width:2.4em;padding-left:.35em;text-align:left;color:var(--dim)}
+  .price tr+tr>*{border-top:1px solid var(--line)}
+  .price .disc>*{color:var(--ok-ink)}
+  .price .sub th,.price .sub td{color:var(--ink);font-weight:700}
+  .price .tot>*{color:var(--ink);font-weight:700;border-top:1.5px solid var(--ok)}
+
+  .scope{margin:-4px 0 18px;color:var(--dim);font-size:0.9688rem;max-width:40em}
+  .scope strong{color:var(--ink)}
+
+  /* ─── En option : violet, pour la distinguer de ce qui est compris ─── */
+  .opt{display:grid;grid-template-columns:1fr auto;gap:12px 28px;align-items:center;background:var(--panel);border:1px solid color-mix(in srgb,var(--violet) 60%,var(--line));border-radius:14px;padding:22px 24px}
+  .opt h3{margin:4px 0 6px;font-family:var(--display);font-weight:500;font-size:1.25rem;letter-spacing:-.01em}
+  .opt p{margin:0;color:var(--dim);font-size:0.9688rem}
+  .opt .reco{display:inline-block;padding:1px 9px;border-radius:5px;color:var(--violet-ink);box-shadow:inset 0 0 0 1px currentColor;font-size:0.8125rem;font-weight:700}
+  .opt-price{text-align:right;white-space:nowrap}
+  .opt-price b{display:block;font-size:1.25rem;color:var(--ink);font-variant-numeric:tabular-nums}
+  .opt-price span{color:var(--dim);font-size:0.875rem}
+  .opt-note{margin:8px 0 0;color:var(--faint);font-size:0.875rem}
+
+  /* ─── Échéancier : la barre est la règle, les échéances s'alignent dessous ─── */
+  .bar{display:flex;height:14px;border-radius:4px;overflow:hidden;margin-bottom:6px}
+  .bar i{flex:40;background:var(--ok)}
+  .bar i+i{flex:60;background:var(--ok-bg);box-shadow:inset 0 0 0 1.5px var(--ok);border-radius:0 4px 4px 0}
+  .ticks{display:flex;height:8px;margin-bottom:14px}
+  .ticks i{flex:40;border-left:1px solid var(--faint)}
+  .ticks i+i{flex:60;border-right:1px solid var(--faint)}
+  .terms{display:flex;margin:0;padding:0;list-style:none}
+  .terms li{flex:40;padding-right:16px}
+  .terms li+li{flex:60;padding-right:0}
+  .pct{display:block;font-family:var(--display);font-weight:400;font-size:2rem;line-height:1.1;color:var(--ok);font-variant-numeric:tabular-nums}
+  .lbl{display:block;font-weight:700;line-height:1.3;margin:6px 0 4px}
+  .amt{display:block;color:var(--dim);font-variant-numeric:tabular-nums;font-size:0.9688rem}
+  .amt b{color:var(--ink);white-space:nowrap}
+  .amt span{white-space:nowrap}
+  /* texte très agrandi : les deux échéances passent l'une sous l'autre */
+  .schedule{container-type:inline-size}
+  @container (max-width:20rem){.terms{flex-direction:column;gap:14px}.terms li{padding-right:0}}
+
+  /* ─── Règlement ─── */
+  .pay{display:flex;flex-wrap:wrap;gap:12px}
+  .pay>:first-child{flex:1.55 1 26rem}
+  .pay>:last-child{flex:1 1 14rem}
+  .pay h3,.card h3{margin:0 0 14px;font-family:var(--display);font-weight:500;font-size:1.25rem;letter-spacing:-.01em}
+  .pay dl{margin:0;display:grid;gap:12px}
+  .pay dt{font-size:0.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);font-weight:600}
+  .pay dd{margin:2px 0 0;font-weight:600}
+  .iban{font-family:var(--mono);font-size:1.0625rem;font-weight:500;letter-spacing:.02em}
+  .iban span{white-space:nowrap}
+  .pay>.card{container-type:inline-size}
+  @container (max-width:18rem){.iban span{white-space:normal}}
+  .bic{font-family:var(--mono);font-weight:500;letter-spacing:.04em}
+  .copy{margin-top:16px;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 18px;border:0;border-radius:10px;background:var(--ok);color:var(--on-ok);font:700 0.9375rem/1 var(--text);cursor:pointer;transition:background-color .15s}
+  .copy:hover{background:color-mix(in srgb,var(--ok) 82%,#fff)}
+  .copy svg{width:18px;height:18px}
+  .copy[data-done]{background:var(--ok-bg);color:var(--ok);box-shadow:inset 0 0 0 1.5px var(--ok)}
+  .copy:focus-visible{outline-offset:4px}
+  .revo p{margin:0;color:var(--dim)}
+  .revo strong{color:var(--ink)}
+
+  /* ─── Bon à savoir ─── */
+  .notes{margin:0;padding:0;list-style:none;display:grid;gap:0}
+  .notes li{padding:14px 0;border-top:1px solid var(--line);color:var(--dim);font-size:0.9688rem}
+  .notes li:first-child{border-top:0;padding-top:0}
+  .notes strong{color:var(--ink)}
+
+  /* ─── Bon pour accord ─── */
+  .agree>p{margin:0 0 20px;font-size:1.0625rem}
+  .sign{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .sign div{min-height:170px;border:1.5px dashed var(--faint);border-radius:12px;padding:16px 18px}
+  .sign b{display:block}
+  .sign span{display:block;color:var(--dim);font-size:0.875rem;margin-top:2px}
+
+  footer{border-top:1px solid var(--line);padding-top:20px;color:var(--dim);font-size:0.875rem;text-align:center}
+
+  @media (max-width:640px){
+    .wrap{padding:40px 16px 56px}
+    .parties,.sign{grid-template-columns:1fr}
+    .card{padding:20px 18px}
+    .together{grid-template-columns:1fr;padding:24px 20px}
+    .opt{grid-template-columns:1fr;padding:20px 18px}
+    .opt-price{text-align:left}
+    .opt-price b,.opt-price span{display:inline}
+    .together svg{grid-row:auto;width:36px;height:36px}
+    .together h2{font-size:1.5rem}
+    .iban{font-size:1rem}
+    .terms li{padding-right:10px}
+    .pct{font-size:1.625rem}
+    .amt b,.amt span{display:block}
+    .amt i{display:none}
+  }
+
+  /* ─── Impression : thème clair, A4, deux pages — Montant ouvre la page 2 ─── */
+  @page{size:A4;margin:11mm 13mm}
+  @media print{
+    :root{
+      --bg:#fff; --panel:#f3f6f8; --panel-2:#e9eef2; --line:#d3dbe3;
+      --ink:#111820; --dim:#34414e; --faint:#4f6173;
+      --ok:#0b7189; --ok-bg:#e5f3f7; --on-ok:#fff;
+      --violet:#4f229e; --violet-ink:#4f229e; --violet-bg:#efe9fa; --ok-ink:#0b7189;
+      color-scheme:light;
+    }
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    html,body{background:#fff}
+    body{font-size:9.4pt;line-height:1.42}
+    .wrap{max-width:none;padding:0}
+    .copy{display:none}
+    .card,.grp,.together,.parties,.pay,.sign,.terms,.notes li,.price tr,header{break-inside:avoid}
+    h2{break-after:avoid;margin-bottom:9px;font-size:7.4pt}
+    section,.parties{margin-bottom:12px}
+    .card{padding:11px 14px;border-radius:9px}
+
+    .brand{margin-bottom:10px}
+    h1{font-size:23pt;margin-bottom:4px}
+    .lead{font-size:10.5pt;margin-bottom:12px}
+    .pills{margin-bottom:12px}
+    .pills li{padding:4px 10px;border-radius:7px}
+    .pills small{font-size:6.6pt}
+    .pills span{font-size:9pt}
+    .parties{gap:8px}
+    .parties p{font-size:9pt}
+    .parties p b{font-size:10pt}
+
+    .groups{grid-template-columns:1fr 1fr;gap:8px}
+    .grp h3{font-size:11.5pt;margin-bottom:5px}
+    .grp h3 svg{width:17px;height:17px}
+    .grp li{font-size:8.5pt;line-height:1.32;padding:3px 0 3px 14px}
+    .grp li::before{width:5px;height:5px;top:.85em;left:1px}
+    .tag{font-size:7.4pt}
+
+    .together{padding:14px 18px;border-radius:11px;gap:4px 14px}
+    .together svg{width:30px;height:30px}
+    .together h2{font-size:15pt;margin:0}
+    .together p{font-size:10pt;line-height:1.5}
+
+    .amount{break-before:page}
+    .price th,.price td{padding:4.5px 0}
+    .price th{padding-right:12px}
+    .pct{font-size:15pt}
+    .lbl{font-size:9.4pt;margin:2px 0 1px}
+    .amt{font-size:9pt}
+    .pay dd{font-size:9.4pt}
+    .revo p{font-size:9pt}
+    .bar{height:8px}
+    .ticks{margin-bottom:4px;height:6px}
+    .pay{gap:8px}
+    .pay h3,.card h3{font-size:11.5pt;margin-bottom:8px}
+    .pay dl{gap:4px}
+    .pay dt{font-size:6.6pt}
+    .iban{font-size:10pt}
+    .notes li{padding:4px 0;font-size:8.6pt;line-height:1.38}
+    .opt{padding:10px 14px;border-radius:9px;break-inside:avoid}
+    .opt h3{font-size:11.5pt;margin:3px 0 2px}
+    .opt p,.scope{font-size:8.8pt}
+    .opt .reco{font-size:7.4pt}
+    .opt-price b{font-size:11pt}
+    .opt-note{font-size:8pt;margin-top:4px}
+    .scope{margin:-2px 0 8px}
+    .agree>p{font-size:9.6pt;margin-bottom:10px}
+    .sign div{min-height:64px;padding:10px 12px;border-radius:9px}
+    .sign span{font-size:8pt}
+    footer{padding-top:6px;font-size:8pt;break-before:avoid}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <p class="brand"><b>Ailive.fr</b><span>Devis n° AIL-2026-0930-LELLOUCHE</span></p>
+    <h1>Visibilité Google et IA du cabinet</h1>
+    <p class="lead">Toutes les corrections de l'audit de septembre 2026. Le site reste sur ta plateforme actuelle.</p>
+    <ul class="pills">
+      <li><small>Émis le</small><span>30 septembre 2026</span></li>
+      <li><small>Valable jusqu'au</small><span>30 octobre 2026</span></li>
+      <li><small>Délai</small><span>3 à 4 jours</span></li>
+    </ul>
+  </header>
+
+  <div class="parties">
+    <div class="card">
+      <h2>Client</h2>
+      <p><b>Dr Patrick Lellouche</b>Chirurgien-dentiste<br>139 rue de Paris, 94220 Charenton-le-Pont</p>
+    </div>
+    <div class="card">
+      <h2>Prestataire</h2>
+      <p><b>Ailive.fr</b>Emmanuel Mesguich<br>Paris</p>
+    </div>
+  </div>
+
+  <section class="included">
+    <h2>Ce qui est compris</h2>
+    <p class="scope">Le devis inclut toutes les corrections de l'audit qui t'a été envoyé, <strong>à l'exception des pages dédiées aux soins</strong>, proposées en option.</p>
+    <div class="groups">
+      <div class="card grp">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Google</h3>
+        <ul>
+          <li><strong>Fiche Google complétée</strong> — catégories urgences, implants et blanchiment, description, lien sécurisé vers le site</li>
+          <li><strong>Horaires alignés</strong> sur Google, le site et Doctolib</li>
+          <li><strong>Photos professionnelles du cabinet</strong> ajoutées à la fiche <span class="tag">déjà réalisées, offertes</span></li>
+          <li><strong>Google Analytics et Google Search Console</strong> installés et configurés</li>
+        </ul>
+      </div>
+      <div class="card grp">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9h18M6 6.75h.01M8.5 6.75h.01M7 13h6M7 16h9"/></svg>Ton site</h3>
+        <ul>
+          <li><strong>Une quinzaine d'articles du cabinet</strong> remis en visibilité sur Google</li>
+          <li><strong>Titres et descriptions de plus de 160 pages</strong>, par import automatisé ; titre principal de l'accueil</li>
+          <li><strong>Page praticien complétée</strong> ; page urgences avec une solution hors horaires</li>
+          <li><strong>Mise à jour des photos</strong> sur le site</li>
+          <li>Lien cassé, fautes, pages trop courtes, titres trop longs, image sans texte</li>
+        </ul>
+      </div>
+      <div class="card grp">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>Réputation et informations</h3>
+        <ul>
+          <li><strong>Signalement à Google des avis suspects</strong>, avec demande de suppression — la décision appartient à Google</li>
+          <li><strong>Réponse aux 8 avis en attente</strong>, et une charte de réponse respectant le secret médical</li>
+          <li><strong>Informations harmonisées</strong> — ancienneté, formations, Doctolib, Ameli, annuaires, téléphone</li>
+          <li><strong>Fiche PagesJaunes revendiquée</strong> et mise à jour</li>
+        </ul>
+      </div>
+      <div class="card grp">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></svg>Auprès de Webdentiste</h3>
+        <ul>
+          <li><strong>Ouverture d'un import automatisé</strong> pour les titres et descriptions de ton site</li>
+          <li><strong>Demandes de correction</strong> — fiche d'identité technique, pages anglaise et espagnole, plan du site, niveaux de titres. Leur mise en œuvre dépend de la plateforme.</li>
+        </ul>
+      </div>
+      <div class="card grp">
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5h17M5 16l4.5-5 3.5 3 6-7"/><path d="M15 7h4v4"/></svg>Suivi</h3>
+        <ul>
+          <li><strong>Rapport à 30 et à 90 jours</strong> — les mêmes mesures que l'audit, avant et après</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="together">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 11 12 4l8.5 7M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/></svg>
+    <h2>Ensemble, chez toi</h2>
+    <p>Une séance d'environ deux heures pour ce qui demande ta présence : accès à ton espace Webdentiste et à ton compte Google, validation de PagesJaunes et de ta fiche Google, repérage des avis que tu ne reconnais pas, relecture des textes et des réponses.</p>
+  </section>
+
+  <section class="amount">
+    <h2>Montant</h2>
+    <div class="card">
+      <table class="price">
+        <tr><th scope="row">Prestation complète</th><td>700,00&nbsp;€</td><td class="u"> HT</td></tr>
+        <tr class="disc"><th scope="row">Remise amicale</th><td>−&nbsp;200,00&nbsp;€</td><td class="u"> HT</td></tr>
+        <tr class="sub"><th scope="row">Total hors taxes</th><td>500,00&nbsp;€</td><td class="u"> HT</td></tr>
+        <tr><th scope="row">TVA 20&nbsp;%</th><td>100,00&nbsp;€</td><td class="u"></td></tr>
+        <tr class="tot"><th scope="row">Total TTC</th><td>600,00&nbsp;€</td><td class="u"></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section class="option">
+    <h2>En option</h2>
+    <div class="opt">
+      <div>
+        <p class="reco">Hautement recommandé</p>
+        <h3>Pages dédiées par type de soin</h3>
+        <p>Une page par soin : implants, facettes, blanchiment… Aujourd'hui, le cabinet n'apparaît pas sur ces recherches. C'est la page dédiée qui l'y fait entrer.</p>
+      </div>
+      <p class="opt-price"><b>100,00&nbsp;€ HT</b> <span>par page</span></p>
+    </div>
+    <p class="opt-note">Non comprises dans le total ci-dessus.</p>
+  </section>
+
+  <section class="schedule">
+    <h2>Échéancier</h2>
+    <div class="bar" aria-hidden="true"><i></i><i></i></div>
+    <div class="ticks" aria-hidden="true"><i></i><i></i></div>
+    <ol class="terms">
+      <li><span class="pct">40&nbsp;%</span><span class="lbl">Acompte à l'accord</span><span class="amt"><span>200,00&nbsp;€ HT</span><i> · </i><b>240,00&nbsp;€ TTC</b></span></li>
+      <li><span class="pct">60&nbsp;%</span><span class="lbl">Solde à la livraison</span><span class="amt"><span>300,00&nbsp;€ HT</span><i> · </i><b>360,00&nbsp;€ TTC</b></span></li>
+    </ol>
+  </section>
+
+  <section class="payment">
+    <h2>Règlement</h2>
+    <div class="pay">
+      <div class="card">
+        <h3>Par virement</h3>
+        <dl>
+          <div><dt>Titulaire</dt><dd>Emmanuel Mesguich</dd></div>
+          <div><dt>IBAN</dt><dd class="iban" id="iban"><span>FR76 2823 3000 0144</span> <span>0470 8482 148</span></dd></div>
+          <div><dt>BIC</dt><dd class="bic">REVOFRP2</dd></div>
+        </dl>
+        <button class="copy" type="button" id="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/></svg><span aria-live="polite">Copier l'IBAN</span></button>
+      </div>
+      <div class="card revo">
+        <h3>Par Revolut</h3>
+        <p>Tu as Revolut ? <strong>Envoie directement depuis tes contacts</strong> — c'est immédiat.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="good-to-know">
+    <h2>Bon à savoir</h2>
+    <ul class="notes">
+      <li><strong>Délai :</strong> 3 à 4 jours après la séance chez toi, hors délai de réponse de Webdentiste.</li>
+      <li><strong>Titres et descriptions en masse :</strong> ils supposent que Webdentiste ouvre un import automatisé. À défaut, ils porteront sur les pages principales et les articles du cabinet.</li>
+      <li><strong>Tes comptes restent à ton nom</strong> — fiche Google, Analytics, Search Console. Tu en gardes la propriété.</li>
+      <li><strong>Tout sera mis en œuvre pour que tu sois visible, et que tu arrives en tête.</strong> Aucune position ne peut toutefois être garantie : c'est Google qui décide. C'est pour ça que tout est mesuré, avant et après.</li>
+      <li>Google Analytics est installé avec recueil du consentement des visiteurs, conformément aux règles de la CNIL, dans la limite de ce que permet ta plateforme.</li>
+    </ul>
+  </section>
+
+  <section class="agree">
+    <h2>Bon pour accord</h2>
+    <p>Un simple message suffit : réponds <strong>« Bon pour accord »</strong> par SMS, WhatsApp ou e-mail. Ou signe ci-dessous.</p>
+    <div class="sign">
+      <div><b>Le client</b><span>Date, signature et mention « Bon pour accord »</span></div>
+      <div><b>Ailive.fr</b><span>Emmanuel Mesguich</span></div>
+    </div>
+  </section>
+
+  <footer>Ailive.fr · Emmanuel Mesguich · Paris</footer>
+</main>
+
+<script>
+(function () {
+  var btn = document.getElementById('copy'), iban = document.getElementById('iban');
+  var label = btn.querySelector('span'), idle = label.textContent, timer;
+  var value = iban.textContent.replace(/\s+/g, '');
+
+  function done() {
+    label.textContent = 'IBAN copié';
+    btn.setAttribute('data-done', '');
+    clearTimeout(timer);
+    timer = setTimeout(function () { label.textContent = idle; btn.removeAttribute('data-done'); }, 2500);
+  }
+  // Repli : on sélectionne l'IBAN à l'écran, prêt à copier à la main.
+  function fallback() {
+    var r = document.createRange(), s = window.getSelection();
+    r.selectNodeContents(iban); s.removeAllRanges(); s.addRange(r);
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    if (ok) done();
+  }
+  btn.addEventListener('click', function () {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(value).then(done, fallback);
+    } else fallback();
+  });
+})();
+</script>
+</body>
+</html>
