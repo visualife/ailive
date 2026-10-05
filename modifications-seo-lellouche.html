@@ -46,6 +46,8 @@
   .copy:active{transform:scale(.97)}
   .copy.ok{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
   mark{background:var(--hl);color:var(--on-hl);padding:0 3px;border-radius:3px;font-weight:600}
+  .scroll{overflow-x:auto}
+  pre mark,code mark{background:#facc15!important;color:#1a1400!important}
   .tw{overflow-x:auto;margin:0 0 18px}
   table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:.9375rem}
   th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
@@ -98,7 +100,8 @@
     <li><a href="#p8">Page orpheline</a></li>
     <li><a href="#p9">Données structurées</a></li>
     <li><a href="#p10">FAQ visible en page d'accueil</a></li>
-    <li><a href="#p11">Search Console et Google Analytics 4</a></li>
+    <li><a href="#p11">Search Console et mesure d'audience</a></li>
+    <li><a href="#p12">Cas cliniques : ordre des photos</a></li>
   </ol>
 </nav>
 
@@ -127,7 +130,7 @@ Meta description : Chirurgien-dentiste à Charenton-le-Pont : soins dentaires, i
 <!-- 3 -->
 <section id="p3">
   <h2><span class="n">3</span>Partage réseaux sociaux (Open Graph / Twitter)</h2>
-  <p>Image actuelle : <code class="i">opvinfhvok_1689765876.webp</code> (1098×737, WebP, mauvais ratio pour le partage). La remplacer par l'image jointe <code class="i">og-chirurgien-dentiste-charenton-le-pont.jpg</code> (1200×630, JPG).</p>
+  <p>Image actuelle : <code class="i">opvinfhvok_1689765876.webp</code> (1098×737, WebP, mauvais ratio pour le partage). La remplacer par l'image jointe <code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-og.jpg</code> (1200×630 px, JPG).</p>
   <div class="code">
     <span class="lbl">Balises à placer dans le &lt;head&gt;</span>
     <button class="copy" type="button">Copier</button>
@@ -140,23 +143,52 @@ Meta description : Chirurgien-dentiste à Charenton-le-Pont : soins dentaires, i
 &lt;meta property="og:image" content="<mark>URL-OG-IMAGE</mark>"&gt;
 &lt;meta property="og:image:width" content="1200"&gt;
 &lt;meta property="og:image:height" content="630"&gt;
-&lt;meta property="og:image:alt" content="Dr Patrick Lellouche, chirurgien-dentiste à Charenton-le-Pont"&gt;
+&lt;meta property="og:image:alt" content="Sourire aux dents blanches, cabinet dentaire du Dr Lellouche à Charenton-le-Pont"&gt;
 &lt;meta name="twitter:card" content="summary_large_image"&gt;
 &lt;meta name="twitter:title" content="Chirurgien-dentiste à Charenton-le-Pont | Dr Patrick Lellouche"&gt;
 &lt;meta name="twitter:description" content="Soins dentaires, implants, facettes, couronnes céramique, aligneurs transparents adultes et urgences dentaires à Charenton-le-Pont."&gt;
 &lt;meta name="twitter:image" content="<mark>URL-OG-IMAGE</mark>"&gt;
-&lt;meta name="twitter:image:alt" content="Dr Patrick Lellouche, chirurgien-dentiste à Charenton-le-Pont"&gt;</code></pre>
+&lt;meta name="twitter:image:alt" content="Sourire aux dents blanches, cabinet dentaire du Dr Lellouche à Charenton-le-Pont"&gt;</code></pre>
   </div>
-  <p class="ph"><mark>URL-OG-IMAGE</mark> : à remplacer par l'URL de l'image une fois téléversée sur Webdentiste.</p>
+  <p class="ph"><mark>URL-OG-IMAGE</mark> : URL publique de <code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-og.jpg</code> une fois téléversée sur Webdentiste (en JPG, non converti en WebP si possible).</p>
 </section>
 
 <!-- 4 -->
 <section id="p4">
   <h2><span class="n">4</span>Image hero (accueil)</h2>
   <ul class="tight">
-    <li>Remplacer l'image d'en-tête actuelle (1098×737 px, floue en grand écran) par le fichier joint <code class="i">chirurgien-dentiste-charenton-le-pont-sourire.png</code> (2000×1340 px, PNG sans perte).</li>
-    <li>Les balises <code class="i">&lt;link rel="preload"&gt;</code> de l'image hero apparaissent deux fois dans le <code class="i">&lt;head&gt;</code> : supprimer le doublon.</li>
+    <li>Remplacer l'image d'en-tête actuelle (1098×737 px, floue en grand écran) par le fichier joint <code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches.jpg</code> (2550×1174 px, JPG), avec ses 7 déclinaisons jointes (tableau ci-dessous). Si la plateforme génère ses propres tailles, seul le fichier 2550 px est nécessaire. Le bloc hero mesure 760 px de haut sur toute la largeur (1905×760 en 1920 px d'écran).</li>
+    <li>Les balises <code class="i">&lt;link rel="preload"&gt;</code> de l'image hero apparaissent deux fois dans le <code class="i">&lt;head&gt;</code> : les remplacer par la balise unique ci-dessous.</li>
   </ul>
+  <div class="code">
+    <span class="lbl">Preload — une seule balise, toutes les dimensions</span>
+    <button class="copy" type="button">Copier</button>
+<pre><code>&lt;link rel="preload" as="image" fetchpriority="high"
+  imagesrcset="
+    <mark>URL-IMAGES</mark>/patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-ms.jpg 320w,
+    <mark>URL-IMAGES</mark>/patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-ml.jpg 480w,
+    <mark>URL-IMAGES</mark>/patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-mp.jpg 640w,
+    <mark>URL-IMAGES</mark>/patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-1024-tp.jpg 1024w,
+    <mark>URL-IMAGES</mark>/patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-ds.jpg 1280w,
+    <mark>URL-IMAGES</mark>/patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-dl.jpg 1536w,
+    <mark>URL-IMAGES</mark>/patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-l.jpg 1920w,
+    <mark>URL-IMAGES</mark>/patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches.jpg 2550w"
+  imagesizes="100vw"&gt;</code></pre>
+  </div>
+  <div class="note">Remplace les trois balises preload actuelles, présentes en double. Le navigateur choisit seul la bonne taille selon la largeur d'écran et la densité de pixels. Le même <code class="i">srcset</code> doit être utilisé sur l'image du bloc hero. <mark>URL-IMAGES</mark> : dossier de téléversement des images sur Webdentiste.</div>
+  <div class="scroll"><table>
+    <thead><tr><th>Fichier joint</th><th>Dimensions</th></tr></thead>
+    <tbody>
+      <tr><td><code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches.jpg</code></td><td>2550×1174</td></tr>
+      <tr><td><code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-l.jpg</code></td><td>1920×884</td></tr>
+      <tr><td><code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-dl.jpg</code></td><td>1536×707</td></tr>
+      <tr><td><code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-ds.jpg</code></td><td>1280×589</td></tr>
+      <tr><td><code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-1024-tp.jpg</code></td><td>1024×471</td></tr>
+      <tr><td><code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-mp.jpg</code></td><td>640×295</td></tr>
+      <tr><td><code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-ml.jpg</code></td><td>480×221</td></tr>
+      <tr><td><code class="i">patrick-lellouche.chirurgiens-dentistes-sourire-dents-blanches-ms.jpg</code></td><td>320×147</td></tr>
+    </tbody>
+  </table></div>
   <div class="code">
     <span class="lbl">Texte alternatif</span>
     <button class="copy" type="button">Copier</button>
@@ -344,7 +376,7 @@ Meta description : Chirurgien-dentiste à Charenton-le-Pont : soins dentaires, i
 
 <!-- 11 -->
 <section id="p11">
-  <h2><span class="n">11</span>Google Search Console et Google Analytics 4</h2>
+  <h2><span class="n">11</span>Google Search Console et mesure d'audience</h2>
   <p><strong>Search Console</strong> — enregistrement DNS TXT sur <code class="i">dr-patrick-lellouche.chirurgiens-dentistes.fr</code> :</p>
   <div class="code">
     <span class="lbl">Enregistrement DNS TXT</span>
@@ -353,23 +385,28 @@ Meta description : Chirurgien-dentiste à Charenton-le-Pont : soins dentaires, i
   </div>
   <p>Si l'ajout DNS est impossible : ajouter à la place la balise meta de vérification dans le <code class="i">&lt;head&gt;</code> de l'accueil (transmise sur demande).</p>
 
-  <p style="margin-top:28px"><strong>Google Analytics 4</strong> — dans le gabarit commun (<code class="i">&lt;head&gt;</code>), une seule fois pour tout le site. Déclenchement uniquement après consentement via le bandeau cookies (CNIL). Si l'admin propose un champ dédié, renseigner seulement <code class="i">G-4XEEMTF637</code>.</p>
+  <p style="margin-top:28px"><strong>Mesure d'audience (Plausible)</strong> — dans le gabarit commun (<code class="i">&lt;head&gt;</code>), une seule fois pour tout le site. Plausible fonctionne sans cookie : pas de Google Analytics.</p>
   <div class="code">
-    <span class="lbl">Balise Google (gtag.js)</span>
+    <span class="lbl">Script Plausible</span>
     <button class="copy" type="button">Copier</button>
-<pre><code>&lt;!-- Google tag (gtag.js) --&gt;
-&lt;script async src="https://www.googletagmanager.com/gtag/js?id=G-4XEEMTF637"&gt;&lt;/script&gt;
+<pre><code>&lt;!-- Privacy-friendly analytics by Plausible --&gt;
+&lt;script async src="https://plausible.io/js/pa-waT94pCb48KIcNMT-6IZr.js"&gt;&lt;/script&gt;
 &lt;script&gt;
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-4XEEMTF637');
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
 &lt;/script&gt;</code></pre>
   </div>
+  <div class="note">Si l’administration propose un champ « code personnalisé / scripts dans le &lt;head&gt; », y coller ce code tel quel. Aucun bandeau cookies n’est nécessaire.</div>
+</section>
+
+<!-- 12 -->
+<section id="p12">
+  <h2><span class="n">12</span>Cas cliniques — ordre des photos</h2>
+  <p>Sur <code class="i">/cas-cliniques</code>, placer les nouvelles photos (haute résolution) en premier, et les plus anciennes (petit format) en fin de page.</p>
 </section>
 
 <footer>
-  <p>Si certaines modifications ne sont pas possibles sur la plateforme (code personnalisé dans le <code class="i">&lt;head&gt;</code>, balises Open Graph), merci de l'indiquer et de proposer une alternative.</p>
+  <p>Si certaines modifications ne sont pas possibles sur la plateforme (code personnalisé dans le <code class="i">&lt;head&gt;</code>, balises Open Graph, DNS), merci de l'indiquer et de proposer une alternative.</p>
   <p>— Emmanuel Mesguich, Ailive.fr</p>
 </footer>
 
