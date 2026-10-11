@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"color": {
+			"custom": false,
+			"defaultPalette": false,
+			"palette": [
+				{ "slug": "oxblood", "name": "Oxblood", "color": "#3A0D12" },
+				{ "slug": "cream", "name": "Cream", "color": "#F1E8D8" },
+				{ "slug": "coral", "name": "Coral", "color": "#E0806A" },
+				{ "slug": "brass", "name": "Brass", "color": "#C9A86A" },
+				{ "slug": "aubergine", "name": "Aubergine", "color": "#1A0B12" }
+			]
+		},
+		"typography": {
+			"fluid": true,
+			"fontFamilies": [
+				{ "slug": "display", "name": "Bodoni Moda", "fontFamily": "'Bodoni Moda', 'Didot', serif" },
+				{ "slug": "body", "name": "IBM Plex Sans", "fontFamily": "'IBM Plex Sans', system-ui, sans-serif" },
+				{ "slug": "mono", "name": "JetBrains Mono", "fontFamily": "'JetBrains Mono', ui-monospace, monospace" }
+			]
+		}
+	},
+	"styles": {
+		"color": { "background": "#1A0B12", "text": "#F1E8D8" },
+		"typography": { "fontFamily": "var(--wp--preset--font-family--body)" }
+	}
+}
